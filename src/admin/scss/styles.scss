@@ -1,0 +1,28 @@
+@import '../../functions';
+@import '../../mixins';
+@import '../../settings';
+
+body.wp-admin .editor-styles-wrapper {
+
+}
+
+#helsinki-tpr-unit {
+    .post-tpr-data {
+        display: none;
+
+        &.active {
+            display: block;
+        }
+
+        .tpr-img {
+            img {
+                max-width: 100%;
+                object-fit: cover;
+
+                @include breakpoint('xl') {
+                    max-width: 600px;
+                }
+            }
+        }
+    }
+}
