@@ -58,10 +58,10 @@ class Helsinki_TPR_Search_Table extends \WP_List_Table
     public function get_columns()
     {
         $columns = array(
-            'name_fi'       => 'Name',
+            'name_fi'       => __('Name', 'helsinki-tpr'),
             'id'          => 'ID',
-            'short_desc_fi' => 'Description',
-            'control'        => 'Options',
+            'short_desc_fi' => __('Description', 'helsinki-tpr'),
+            'control'        => __('Options', 'helsinki-tpr'),
         );
 
         return $columns;

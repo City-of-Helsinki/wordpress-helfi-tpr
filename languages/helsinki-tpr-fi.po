@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: Helsinki TPR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 10:11+0000\n"
-"PO-Revision-Date: 2022-09-21 10:15+0000\n"
+"PO-Revision-Date: 2022-09-22 05:32+0000\n"
 "Last-Translator: \n"
-"Language-Team: Finnish\n"
+"Language-Team: Suomi\n"
 "Language: fi\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
@@ -35,6 +35,10 @@ msgstr "Lisätiedot"
 #. Author of the plugin
 msgid "Broomu Digitals"
 msgstr "Broomu Digitals"
+
+#: cpt/unit-search-table.php:63
+msgid "Description"
+msgstr "Kuvaus"
 
 #: views/metabox/unit-data.php:15 views/metabox/unit-data.php:28
 #: views/metabox/unit-data.php:41
@@ -70,8 +74,8 @@ msgstr "Lisää toimipiste"
 msgid "Integration with the Helsinki TPR API."
 msgstr "Integraatio Helsinki TPR API:n kanssa."
 
-#: views/metabox/unit-data.php:12 views/metabox/unit-data.php:25
-#: views/metabox/unit-data.php:38
+#: cpt/unit-search-table.php:61 views/metabox/unit-data.php:12
+#: views/metabox/unit-data.php:25 views/metabox/unit-data.php:38
 msgid "Name"
 msgstr "Nimi"
 
@@ -84,10 +88,24 @@ msgstr "Aukioloajat"
 msgid "Open post"
 msgstr "Avaa julkaisu"
 
+#: cpt/unit-search-table.php:64
+msgid "Options"
+msgstr "Vaihtoehdot"
+
 #: views/metabox/unit-data.php:14 views/metabox/unit-data.php:27
 #: views/metabox/unit-data.php:40
 msgid "Phone"
 msgstr "Puhelin"
+
+#: cpt/unit-config.php:18
+msgctxt "Post type general name"
+msgid "Helsinki TPR Units"
+msgstr "Helsinki TPR Toimipisteet"
+
+#: cpt/unit-config.php:19
+msgctxt "Post type singular name"
+msgid "Helsinki TPR Unit"
+msgstr "Helsinki TPR Toimipiste"
 
 #: views/metabox/unit-data.php:18 views/metabox/unit-data.php:31
 #: views/metabox/unit-data.php:44

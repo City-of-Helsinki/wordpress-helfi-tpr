@@ -15,8 +15,8 @@ function register() {
 		'helsinki_tpr_unit',
 		array(
 	        'labels'             => array(
-		        'name'                  => _x( 'Helsinki TPR Units', 'Post type general name', 'textdomain' ),
-		        'singular_name'         => _x( 'Helsinki TPR Unit', 'Post type singular name', 'textdomain' ),
+		        'name'                  => _x( 'Helsinki TPR Units', 'Post type general name', 'helsinki-tpr' ),
+		        'singular_name'         => _x( 'Helsinki TPR Unit', 'Post type singular name', 'helsinki-tpr' ),
 		    ),
 	        'public'             => false,
 	        'publicly_queryable' => false,
@@ -54,16 +54,6 @@ function admin_assets( $hook ) {
 	if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
 		return;
 	}
-
-	/*wp_enqueue_style( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css' );
-	wp_enqueue_script( 'select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('jquery') );
-	wp_enqueue_script(
-		'helsinki-linkedevents-select2',
-		Plugin\plugin_url() . 'assets/admin/js/select2.js',
-		array( 'jquery', 'select2' ),
-		Plugin\PLUGIN_VERSION,
-		true
-	);*/
 }
 
 add_filter( 'use_block_editor_for_post_type', __NAMESPACE__ . '\\disable_editor', 10, 2 );
@@ -95,49 +85,8 @@ function render_metabox( $post, $metabox ) {
 
 	wp_nonce_field( 'helsinki-tpr-unit-nonce', 'helsinki-tpr-unit-nonce' );
 
-	/*$filterConfig = array(
-		'keyword' => array(
-			'title' => __( 'Keywords', 'helsinki-tpr' ),
-			'multiple' => true,
-		),
-		'language' => array(
-			'title' => __( 'Languages', 'helsinki-tpr' ),
-			'multiple' => true,
-		),
-		'publisher' => array(
-			'title' => __( 'Publishers', 'helsinki-tpr' ),
-			'multiple' => true,
-		),
-		'location' => array(
-			'title' => __( 'Locations', 'helsinki-tpr' ),
-			'multiple' => true,
-		),
-		'is_free' => array(
-			'title' => __( 'Price', 'helsinki-tpr' ),
-			'multiple' => false,
-		),
-	);
-
-	$filters = array();
-	foreach ( $metabox['args']['filters'] as $filter => $options ) {
-		$current = array();
-		if ( ! empty( $savedOptions[$filter] ) ) {
-			$current = is_array( $savedOptions[$filter] ) ? array_flip( $savedOptions[$filter] ) : $savedOptions[$filter];
-		}
-
-		$filters[$filter] = array(
-			'current' => $current,
-			'options' => $options,
-			'title' => $filterConfig[$filter]['title'] ?? ucfirst( $filter ),
-			'multiple' => $filterConfig[$filter]['multiple'] ?? false,
-		);
-	}*/
-
 	$unit = Units::entities($post->ID);
 	Plugin\metabox_view( 'unit-data', $unit );
-	//if ( 'publish' === $post->post_status ) {
-		//require_once Plugin\views_path( 'unit' ) . 'unit-list.php';
-		//}
 }
 
 function render_unit_data_row($name, array $values, $classes = '') {
@@ -197,8 +146,8 @@ function filter_post_data( $data , $postarr ) {
     return $data;
 }
 
-add_action( 'delete_post', __NAMESPACE__ . '\\delete_event_config' , 10, 2  );
-function delete_event_config( $postid, $post ) {
+add_action( 'delete_post', __NAMESPACE__ . '\\delete_tpr_unit_config' , 10, 2  );
+function delete_tpr_unit_config( $postid, $post ) {
 	if ( 'helsinki_tpr_unit' === $post->post_type ) {
 		CacheManager::clear( 'unit-' . $postid );
 	}
