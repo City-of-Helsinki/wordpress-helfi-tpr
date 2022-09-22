@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Helsinki TPR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-22 05:30+0000\n"
+"POT-Creation-Date: 2022-09-22 07:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Loco-Version: 2.6.0; wp-6.0.2\n"
 "X-Domain: helsinki-tpr"
 
-#: cpt/unit-config.php:155
+#: cpt/unit-config.php:106
 msgid "(empty)"
 msgstr ""
 
-#: cpt/unit-config.php:43 cpt/unit-config.php:44
+#: cpt/unit-config.php:45 cpt/unit-config.php:46
 msgid "Add new unit"
 msgstr ""
 
@@ -85,7 +85,7 @@ msgstr ""
 msgid "Open hours"
 msgstr ""
 
-#: cpt/unit-config.php:171
+#: cpt/unit-config.php:122
 msgid "Open post"
 msgstr ""
 
@@ -96,16 +96,6 @@ msgstr ""
 #: views/metabox/unit-data.php:14 views/metabox/unit-data.php:27
 #: views/metabox/unit-data.php:40
 msgid "Phone"
-msgstr ""
-
-#: cpt/unit-config.php:18
-msgctxt "Post type general name"
-msgid "Helsinki TPR Units"
-msgstr ""
-
-#: cpt/unit-config.php:19
-msgctxt "Post type singular name"
-msgid "Helsinki TPR Unit"
 msgstr ""
 
 #: views/metabox/unit-data.php:18 views/metabox/unit-data.php:31
@@ -130,8 +120,16 @@ msgstr ""
 msgid "Swedish"
 msgstr ""
 
-#: cpt/unit-config.php:81
+#: cpt/unit-config.php:19 cpt/unit-config.php:73
 msgid "TPR Unit"
+msgstr ""
+
+#: cpt/unit-config.php:18 cpt/unit-config.php:20
+msgid "TPR Units"
+msgstr ""
+
+#: cpt/unit-config.php:21
+msgid "Units"
 msgstr ""
 
 #: views/metabox/unit-data.php:16 views/metabox/unit-data.php:29

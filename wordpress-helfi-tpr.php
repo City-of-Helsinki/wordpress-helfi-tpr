@@ -34,6 +34,7 @@ function init() {
 	  * Plugin parts
 	  */
 	require_once 'functions.php';
+	textdomain();
 
 	spl_autoload_register( __NAMESPACE__ . '\\autoloader' );
 
@@ -45,7 +46,7 @@ function init() {
 	/**
 	  * Actions & filters
 	  */
-	add_action( 'init', __NAMESPACE__ . '\\textdomain' );
+	//add_action( 'init', __NAMESPACE__ . '\\textdomain' );
 
 	/**
 	  * Plugin ready

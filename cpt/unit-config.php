@@ -15,8 +15,10 @@ function register() {
 		'helsinki_tpr_unit',
 		array(
 	        'labels'             => array(
-		        'name'                  => _x( 'Helsinki TPR Units', 'Post type general name', 'helsinki-tpr' ),
-		        'singular_name'         => _x( 'Helsinki TPR Unit', 'Post type singular name', 'helsinki-tpr' ),
+		        'name'                  => __( 'TPR Units', 'helsinki-tpr' ),
+		        'singular_name'         => __( 'TPR Unit', 'helsinki-tpr' ),
+				'menu_name'             => __( 'TPR Units', 'helsinki-tpr' ),
+				'all_items'				=> __( 'Units', 'helsinki-tpr' ),
 		    ),
 	        'public'             => false,
 	        'publicly_queryable' => false,
