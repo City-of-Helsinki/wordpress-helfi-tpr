@@ -2,6 +2,7 @@
 
 namespace CityOfHelsinki\WordPress\TPR\Blocks;
 
+use ArtCloud\Helsinki\Plugin\HDS\Svg;
 use CityOfHelsinki\WordPress\TPR as Plugin;
 use CityOfHelsinki\WordPress\TPR\Api\Units;
 
@@ -10,11 +11,11 @@ use WP_Block_Editor_Context;
 /**
   * Config
   */
-/*function blocks() {
+function blocks() {
 	return array(
-		'grid' => array(
-			'title' => __( 'Helsinki - Events', 'hds-wp' ),
-			'category' => 'helsinki-linkedevents',
+		'unit' => array(
+			'title' => __( 'Helsinki - TPR Unit', 'helsinki-tpr' ),
+			'category' => 'helsinki-tpr',
 			'dependencies' => array(
 				'wp-blocks',
 				'wp-i18n',
@@ -25,32 +26,56 @@ use WP_Block_Editor_Context;
 				'wp-data',
 				'wp-server-side-render',
 			),
-			'render_callback' => __NAMESPACE__ . '\\render_events_grid',
+			'render_callback' => __NAMESPACE__ . '\\render_unit',
 			'attributes' => array(
-				'configID' => array(
+				'postID' => array(
 					'type' => 'string',
 					'default' => 0,
 				),
-				'title' => array(
-					'type' => 'string',
-					'default' => '',
+				'showStreetAddress' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showPostalAddress' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showPhone' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showEmail' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showOpenHours' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showWebsite' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showAdditionalInfo' => array(
+					'type'    => 'boolean',
+					'default' => true,
+				),
+				'showPhoto' => array(
+					'type'    => 'boolean',
+					'default' => true,
 				),
 			),
 		)
 	);
 }
 
-function events_per_page() {
-	return 6;
-}*/
-
 /**
   * Register
   */
-/*add_action( 'init', __NAMESPACE__ . '\\register' );
+add_action( 'init', __NAMESPACE__ . '\\register' );
 function register() {
 	foreach ( blocks() as $block => $config ) {
-		register_block_type( "helsinki-linkedevents/{$block}", $config );
+		register_block_type( "helsinki-tpr/{$block}", $config );
 	}
 }
 
@@ -64,13 +89,13 @@ function category( $categories, $context ) {
 		$categories,
 		array(
 			array(
-				'slug' => 'helsinki-linkedevents',
-				'title' => __( 'Helsinki', 'helsinki-linkedevents' ),
-				'icon'  => 'calendar-alt',
+				'slug' => 'helsinki-tpr',
+				'title' => __( 'Helsinki', 'helsinki-tpr' ),
+				'icon'  => 'building',
 			),
 		)
 	);
-}*/
+}
 
 /**
   * Assets
@@ -155,247 +180,241 @@ function public_assets() {
 /**
   * Rendering
   */
-/*function render_events_grid( $attributes ) {
-	if ( empty( $attributes['configID'] ) ) {
+function render_unit( $attributes ) {
+	if ( empty( $attributes['postID'] ) ) {
 		return;
 	}
 
-	$events = Events::current_language_entities( absint($attributes['configID']) );
-	if ( ! $events ) {
+	$unit = Units::entities( absint($attributes['postID']) );
+	if ( ! $unit ) {
 		return;
 	}
-
-	$per_page = events_per_page();
 
 	return sprintf(
-		'<div class="helsinki-events events">
+		'<div class="helsinki-tpr tpr-unit">
 			<div class="hds-container">
 				%s
-				<div class="events__container events__grid">%s</div>
-				%s
+				<div class="tpr__container">%s</div>
 			</div>
 		</div>',
-		render_events_title( $attributes['title'] ?? '', $attributes['configID'] ),
-		render_grid_events( array_slice(
-			$events, 0, $per_page, false
-		) ),
-		count( $events ) > $per_page ? render_load_more_events( $attributes['configID'] ) : ''
+		render_unit_title( $unit->name() ?? '', $attributes['postID'] ),
+		render_unit_data( $unit, $attributes ) 
 	);
 }
 
-function render_events_title( string $title, int $configID ) {
+function render_unit_title( string $title, int $postID ) {
 	return apply_filters(
-		'helsinki_linkedevents_block_title',
+		'helsinki_tpr_unit_block_title',
 		sprintf(
-			'<h2 class="events__title">%s</h2>',
+			'<h2 class="unit__title">%s</h2>',
 			esc_html( $title )
 		),
 		$title,
-		$configID
+		$postID
 	);
 }
 
-function render_load_more_events( int $configID ) {
-	return sprintf(
-		'<p class="events__more">
-			<button class="button hds-button" type="button" data-paged="2" data-config="%d" data-action="helsinki_more_events">%s</button>
-		</p>',
-		$configID,
-		apply_filters(
-			'helsinki_linkedevents_more_events_text',
-			esc_html__( 'Show more events', 'helsinki-linkedevents' ),
-			$configID
-		)
-	);
-}
-
-function render_grid_events( $events ) {
-	return implode( '',
-		apply_filters(
-			'helsinki_linkedevents_grid_events',
-			array_map( __NAMESPACE__ . '\\render_grid_event', $events ),
-			$events
-		)
-	);
-}
-
-function render_grid_event( $event ) {
+function render_unit_data( $unit, $attributes ) {
 	return apply_filters(
-		'helsinki_linkedevents_grid_item',
+		'helsinki_tpr_unit_data',
 		sprintf(
-			'<div class="events__grid__item">%s</div>',
-			render_event_card( $event )
+			'%s
+			%s',
+			render_unit_main_column($unit, $attributes),
+			render_unit_secondary_column($unit, $attributes)
 		),
-		$event
+		$unit,
+		$attributes
 	);
 }
 
-function render_event_card( $event ) {
-	$card = apply_filters(
-		'helsinki_linkedevents_event_card_article',
-		'<article id="%1$s" class="event">%2$s</article>',
-		$event
-	);
+function render_unit_main_column($unit, $attributes) {
+	$data = array();
 
-	$parts = apply_filters(
-		'helsinki_linkedevents_event_card_elements',
-		array(
-			'link_open' => sprintf(
-				'<a class="event__link" href="%s" aria-label="%s">',
-				esc_url( $event->permalink() ),
-				sprintf(
-					'%s - %s',
-					$event->name(),
-					$event->formatted_time_string()
-				)
-			),
-			'image' => render_event_image( $event ),
-			'wrap_open' => '<div class="event__content">',
-			'title' => render_event_title( $event ),
-			'date' => render_event_date( $event ),
-			'venue' => render_event_venue( $event ),
-			'price' => render_event_price( $event ),
-			'more' => render_event_more( $event ),
-			'wrap_close' => '</div>',
-			'link_close' => '</a>',
-		),
-		$event
-	);
-
-	return sprintf(
-		$card,
-		esc_attr( $event->id() ),
-		implode( '', $parts )
-	);
-}
-
-function render_event_image( $event ) {
-	$img = $event->primary_image();
-	if ($img != false) {
-		$html = $img->html_img();
+	if (isset($attributes['showStreetAddress']) && $attributes['showStreetAddress']) {
+		$data[] = render_unit_street_address($unit);
 	}
-	else {
-		$html = false;
+	if (isset($attributes['showPhoto']) && $attributes['showPhoto']) {
+		$data[] = render_unit_image($unit, 'show-on-mobile');
+	}
+	if (isset($attributes['showPostalAddress']) && $attributes['showPostalAddress']) {
+		$data[] = render_unit_postal_address($unit);
+	}
+	if (isset($attributes['showPhone']) && $attributes['showPhone']) {
+		$data[] = render_unit_phone_number($unit);
+	}
+	if (isset($attributes['showEmail']) && $attributes['showEmail']) {
+		$data[] = render_unit_email($unit);
+	}
+	if (isset($attributes['showOpenHours']) && $attributes['showOpenHours']) {
+		$data[] = render_unit_open_hours($unit);
+	}
+	if (isset($attributes['showWebsite']) && $attributes['showWebsite']) {
+		$data[] = render_unit_website($unit);
+	}
+	if (isset($attributes['showAdditionalInfo']) && $attributes['showAdditionalInfo']) {
+		$data[] = render_unit_additional_info($unit, 'show-on-mobile');
 	}
 
-	return apply_filters(
-		'helsinki_linkedevents_event_image',
-		sprintf(
-			'<div class="event__image">%s</div>',
-			$html ? $html : render_event_image_placeholder( $event )
-		),
-		$event
-	);
+	return sprintf('<div class="tpr__container__column tpr__main_column">%s</div>', implode('', apply_filters(
+		'helsinki_tpr_unit_main_elements',
+		$data,
+		$unit, $attributes
+	)));
 }
 
-function render_event_image_placeholder( $event ) {
-	return apply_filters(
-		'helsinki_linkedevents_event_image_placeholder',
-		'<div class="placeholder"></div>',
-		$event
-	);
-}
+function render_unit_secondary_column($unit, $attributes) {
+	$data = array();
 
-function render_event_title( $event ) {
-	return apply_filters(
-		'helsinki_linkedevents_event_title',
-		sprintf(
-			'<h3 class="event__title">%s</h3>',
-			esc_html( $event->name() )
-		),
-		$event
-	);
-}
-
-function render_event_date( $event ) {
-	return apply_filters(
-		'helsinki_linkedevents_event_date',
-		sprintf(
-			'<div class="event__detail event__date">%s<p>%s</p></div>',
-			render_event_icon( 'calendar-clock' ),
-			$event->formatted_time_string()
-		),
-		$event
-	);
-}
-
-function render_event_venue( $event ) {
-	$location = $event->location_string();
-	return apply_filters(
-		'helsinki_linkedevents_event_location',
-		$location ? sprintf(
-			'<address class="event__detail event__venue">%s<p>%s</p></address>',
-			render_event_icon( 'location' ),
-			$location
-		) : '',
-		$event
-	);
-}
-
-function render_event_price( $event ) {
-	$prices = array();
-	foreach ( $event->offers() as $offer ) {
-		if ( $offer->is_free() ) {
-			$price = esc_html__( 'Free', 'helsinki-linkedevents' );
-		} else {
-			if ( ! $offer->price() ) {
-				$price = $offer->description();
-			} else {
-				$price = is_numeric( $offer->price() ) ? $offer->price() . ' €' : $offer->price();
-			}
-		}
-
-		$prices[] = sprintf(
-			'<p class="price">%s</p>',
-			wp_kses_post( $price )
-		);
+	if (isset($attributes['showPhoto']) && $attributes['showPhoto']) {
+		$data[] = render_unit_image($unit);
+	}
+	if (isset($attributes['showAdditionalInfo']) && $attributes['showAdditionalInfo']) {
+		$data[] = render_unit_additional_info($unit);
 	}
 
-	return apply_filters(
-		'helsinki_linkedevents_event_price',
-		sprintf(
-			'<div class="event__detail event__prices">
-				%s<div class="prices">%s</div>
-			</div>',
-			render_event_icon( 'ticket' ),
-			implode( '', $prices )
-		),
-		$event,
-		$prices
+	$html = implode('', apply_filters(
+		'helsinki_tpr_unit_secondary_elements',
+		$data,
+		$unit, $attributes
+	));
+
+	if (!$html) {
+		return '';
+	}
+
+	return sprintf('<div class="tpr__container__column tpr__secondary_column">%s</div>', $html);
+}
+
+function render_unit_section_title($title, $iconType, $icon) {
+	return sprintf('<div class="unit__section_title">%s<div>%s</div></div>', render_unit_icon($iconType, $icon), $title);
+}
+
+function render_unit_icon($type, $icon) {
+	return class_exists(Svg::class) ? Svg::icon($type, $icon) : '';
+}
+
+function render_unit_street_address($unit) {
+	$parts = array();
+	if (!empty($unit->street_address())) {
+		$parts[] = sprintf('<div>%s</div>', $unit->street_address());
+	}
+	if (!empty($unit->address_zip())) {
+		$parts[] = sprintf('<div>%s</div>', $unit->address_zip());
+	}
+	if (!empty($unit->address_city())) {
+		$parts[] = sprintf('<div>%s</div>', $unit->address_city());
+	}
+
+	return sprintf('<div class="unit__street_address">%s<div class="unit__section_data">%s<p></p>%s%s</div></div>',
+		render_unit_section_title(__('Street address', 'helsinki-tpr'), 'blocks', 'location'),
+		implode('', $parts),
+		render_unit_service_map_link($unit),
+		render_unit_hsl_route_link($unit)
 	);
 }
 
-function render_event_more( $event ) {
-	return apply_filters(
-		'helsinki_linkedevents_event_more',
-		sprintf(
-			'<div class="event__more">%s</div>',
-			render_event_icon( 'link-external' )
-		),
-		$event
+function render_unit_service_map_link($unit) {
+	$map_link = $unit->get_service_map_link();
+	return sprintf('<p class="unit__link"><a href="%s">%s</a>%s</p>',
+		$map_link,
+		__('Show in map', 'helsinki-tpr'),
+		render_unit_icon('blocks', 'link-external'),
 	);
 }
 
-function render_event_icon( string $name ) {
-	$path = icon_path( $name );
-	return $path ? sprintf(
-		'<svg class="event__icon icon icon--%s" viewBox="0 0 24 24" aria-hidden="true">
-			<path d="%s"></path>
-		</svg>',
-		$name,
-		$path
-	) : '';
+function render_unit_hsl_route_link($unit) {
+	$route_link = $unit->get_hsl_route_link();
+	if (!$route_link) {
+		return '';
+	}
+	return sprintf('<p class="unit__link"><a href="%s" class="unit__link">%s</a>%s</p>',
+		$route_link,
+		__('Show route in the HSL Journey Planner', 'helsinki-tpr'),
+		render_unit_icon('blocks', 'link-external'),
+	);
 }
 
-function icon_path( string $name ) {
-	$icons = array(
-		'calendar-clock' => 'M17 12a6 6 0 110 12 6 6 0 010-12zm0 2a4 4 0 100 8 4 4 0 000-8zm0-12a1 1 0 011 1v1h4l.002 9.103A7.018 7.018 0 0020 11.674L20 11H4v8l6.071.001a6.95 6.95 0 00.603 2L2 21V4h4V3a1 1 0 112 0v1h8V3a1 1 0 011-1zm.5 13v2.94l1.53 1.53-1.06 1.06L16 18.56V15h1.5zM20 6H4v3h16V6z',
 
-		'location' => 'M11.967 1.5c2.06 0 4.12.778 5.69 2.334 3.143 3.111 2.93 7.96 0 11.268l-.622.709c-2.612 2.991-4.066 4.96-5.068 6.937-1.073-2.13-2.682-4.249-5.689-7.646-2.93-3.308-3.143-8.157 0-11.268A8.06 8.06 0 0111.967 1.5zm.032 2a6.072 6.072 0 00-4.3 1.762A5.606 5.606 0 006.002 9.41c.02 1.573.648 3.134 1.766 4.398l.66.752c1.59 1.823 2.717 3.239 3.573 4.503.975-1.437 2.292-3.063 4.233-5.255 1.118-1.264 1.746-2.825 1.766-4.398a5.616 5.616 0 00-1.698-4.15A6.077 6.077 0 0011.999 3.5zM12 6a3.5 3.5 0 110 6.999A3.5 3.5 0 0112 6zm0 2c-.827 0-1.5.673-1.5 1.5S11.173 11 12 11s1.5-.673 1.5-1.5S12.827 8 12 8z',
+function render_unit_postal_address($unit) {
+	$address = $unit->postal_address();
+	if (!$address) {
+		return '';
+	}
 
-		'ticket' => 'M14.5 2l3.125 3.125L17 5.75a.884.884 0 001.173 1.319L18.25 7l.625-.625L22 9.5 9.5 22l-3.125-3.125L7 18.25a.884.884 0 00-1.173-1.319L5.75 17l-.625.625L2 14.5 14.5 2zm0 2.5l-3 3a1 1 0 11-.991 1.127L10.5 8.5l-6 6 .731.731.169-.073.173-.06a2.656 2.656 0 012.26.312l.166.118.138.115.113.107.138.149c.613.714.785 1.676.515 2.53l-.065.18-.07.16.732.731 6.002-6a1 1 0 11.99-1.126l.008.128 3-3.002-.732-.732-.168.074-.173.06a2.656 2.656 0 01-2.26-.312L16 8.472l-.138-.115-.113-.107-.138-.149a2.652 2.652 0 01-.515-2.53l.065-.18.07-.16L14.5 4.5zm-1.707 5.293a1 1 0 111.414 1.414 1 1 0 01-1.414-1.414z',
-
-		'link-external' => 'M10 3v2H5v14h14v-5h2v7H3V3h7zm11 0v8h-2V6.413l-7 7.001L10.586 12l6.999-7H13V3h8z',
+	return sprintf('<div class="unit__postal_address">%s<div class="unit__section_data"><p>%s</p></div></div>',
+		render_unit_section_title(__('Postal address', 'helsinki-tpr'), 'blocks', 'location'),
+		$unit->postal_address(),
 	);
-	return $icons[$name] ?? '';
-}*/
+}
+
+function render_unit_phone_number($unit) {
+	$phone = $unit->phone();
+	if (!$phone) {
+		return '';
+	}
+	return sprintf('<div class="unit__phone">%s<div class="unit__section_data"><p>%s</p></div></div>',
+		render_unit_section_title(__('Phonenumber', 'helsinki-tpr'), 'blocks', 'phone'),
+		$phone,
+	);
+}
+
+function render_unit_email($unit) {
+	$email = $unit->email();
+	if (!$email) {
+		return '';
+	}
+	return sprintf('<div class="unit__email">%s<div class="unit__section_data"><p>%s</p></div></div>',
+		render_unit_section_title(__('Email', 'helsinki-tpr'), 'blocks', 'envelope'),
+		$email,
+	);
+}
+
+function render_unit_open_hours($unit) {
+	$hours = $unit->open_hours();
+	if (!$hours) {
+		return '';
+	}
+	return sprintf('<div class="unit__open_hours">%s<div class="unit__section_data">%s</div></div>',
+		render_unit_section_title(__('Open hours', 'helsinki-tpr'), 'blocks', 'clock'),
+		'<p>' . implode('</p><p>', $hours) . '</p>',
+	);
+}
+
+function render_unit_website($unit) {
+	$weburl = $unit->website_url();
+	if (!$weburl) {
+		return '';
+	}
+	return sprintf('<div class="unit__website">%s<div class="unit__section_data"><p><a href="%s">%s</a></p></div></div>',
+		render_unit_section_title(__('Other links', 'helsinki-tpr'), 'blocks', 'globe'),
+		$weburl,
+		$weburl,
+	);
+}
+
+function render_unit_image($unit, $extra_classes = '') {
+	$image = $unit->html_img();
+
+	if (!$image) {
+		return '';
+	}
+
+	return sprintf('<div class="unit__image %s">%s</div>',
+		$extra_classes,
+		$image,
+	);
+}
+
+function render_unit_additional_info($unit, $extra_classes = '') {
+	$info = $unit->additional_info();
+	if (!$info) {
+		return '';
+	}
+	return sprintf('<div class="unit__additional_info %s">%s<div class="unit__section_data">%s</div></div>',
+		$extra_classes,
+		render_unit_section_title(__('Additional information', 'helsinki-tpr'), 'blocks', 'info-circle'),
+		'<p>' . implode('</p><p>', $unit->additional_info()) . '</p>',
+	);
+
+}

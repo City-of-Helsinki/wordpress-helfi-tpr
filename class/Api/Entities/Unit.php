@@ -178,6 +178,64 @@ class Unit extends Entity {
 		}
 	}
 
+    public function get_service_map_link() {
+        $allowed_langs = array(
+            'fi',
+            'en',
+            'svg'
+        );
+        $current_lang = $this->current_language();
+        if (!in_array($current_lang, $allowed_langs)) {
+            $current_lang = 'en';
+        }
+
+        if (!$this->id()) {
+            return null;
+        }
+
+        return 'https://palvelukartta.hel.fi/' . $current_lang . '/unit/' . $this->id();
+    }
+
+    public function get_hsl_route_link() {
+        $allowed_langs = array(
+            'fi',
+            'en',
+            'sv'
+        );
+        $current_lang = $this->current_language();
+        if (!in_array($current_lang, $allowed_langs)) {
+            $current_lang = 'en';
+        }
+
+        $street_address = $this->street_address();
+        $address_city = $this->address_city();
+        $latitude = $this->get_latitude();
+        $longitude = $this->get_longitude();
+
+        if (!$street_address || !$address_city || !$latitude || !$longitude) {
+            return null;
+        }
+
+        return sprintf('https://reittiopas.hsl.fi/%s/reitti/POS/', 
+            $current_lang,
+        ) . rawurlencode(sprintf('%s, %s::%s,%s',
+            $this->street_address(),
+            $this->address_city(),
+            $this->get_latitude(),
+            $this->get_longitude(),
+        ));
+;
+
+    }
+
+    public function get_latitude() {
+        return $this->entity_data->latitude ?? null;
+    }
+
+    public function get_longitude() {
+        return $this->entity_data->longitude ?? null;
+    }
+
 
     /**
      * Get image url
