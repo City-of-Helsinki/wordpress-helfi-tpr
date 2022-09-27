@@ -113,6 +113,22 @@
 });
 
 (function (wp) {
+  var __ = wp.i18n.__;
+  var _wp$blocks = wp.blocks,
+      unregisterBlockType = _wp$blocks.unregisterBlockType,
+      unregisterBlockVariation = _wp$blocks.unregisterBlockVariation,
+      getBlockType = _wp$blocks.getBlockType,
+      getBlockVariations = _wp$blocks.getBlockVariations;
+  wp.domReady(function () {
+    if (document.querySelector('body').classList.contains('post-type-post')) {
+      if (getBlockType('helsinki-tpr/unit')) {
+        unregisterBlockType('helsinki-tpr/unit');
+      }
+    }
+  });
+})(window.wp);
+
+(function (wp) {
   var __ = wp.i18n.__,
       registerBlockType = wp.blocks.registerBlockType,
       ServerSideRender = wp.serverSideRender,
