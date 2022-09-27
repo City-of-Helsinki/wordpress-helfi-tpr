@@ -111,6 +111,7 @@ function category( $categories, $context ) {
 	return array_unique( $dependencies, SORT_STRING );
 }*/
 
+
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets', 10 );
 function admin_assets( string $hook ) {
 	//if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
@@ -136,6 +137,12 @@ function admin_assets( string $hook ) {
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 		)
 	);
+
+	wp_set_script_translations(
+        'helsinki-tpr-scripts',
+        'helsinki-tpr',
+        Plugin\plugin_path() . 'languages'
+    );
 
 	wp_enqueue_style(
 		'helsinki-tpr-tyles',
