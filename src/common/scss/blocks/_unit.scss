@@ -1,0 +1,109 @@
+@use "sass:math";
+
+.helsinki-tpr.tpr-unit {
+    background-color: rgb(247, 247, 248);
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    max-width: 100vw;
+    width: 100vw;
+    padding-top: 64px;
+    padding-bottom: 64px;
+
+    .unit__title {
+    }
+
+    .hds-container {
+        padding: 0;
+
+        @include breakpointMax('m') {
+            padding-left: spacing('s');
+            padding-right: spacing('s');
+        }
+    }
+
+
+    .tpr__container {
+        margin-bottom: 24px;
+
+        p {
+            margin-bottom: spacing('s');
+        }
+
+        .tpr__container__column {
+            margin-bottom: 24px;
+
+            &.tpr__secondary_column {
+                @include breakpointMax('m') {
+                    display: none;
+                }
+            }
+        }
+
+        @include breakpoint('m') {
+            display: flex;
+            column-gap: 24px;
+            flex-wrap: wrap;
+            justify-content: left;
+
+            .tpr__container__column {
+                flex: 1 0 calc(50% - 14px);
+            }
+        }
+
+        .unit__section_title {
+            display: flex;
+            font-weight: bold;
+
+            .icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+            }
+
+            div {
+                line-height: 28px;
+            }
+        }
+
+        .unit__section_data {
+            margin-left: 32px;
+            padding-bottom: spacing('s');
+        }
+
+        .unit__image {
+            margin-bottom: spacing('l');
+        }
+
+        .unit__image, .unit__additional_info {
+            &.show-on-mobile {
+                @include breakpoint('m') {
+                    display: none;
+                }
+            }
+        }
+
+        .unit__website {
+            a {
+                overflow-wrap: anywhere;
+            }
+        }
+
+        .unit__link {
+            display: flex;
+            font-weight: 700;
+
+            svg {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+}
+
+.has-sidebar .helsinki-tpr.tpr-unit {
+    background-color: transparent;
+    margin: 0 auto var(--spacing-layout-l);
+    width: auto;
+    max-width: none;
+    padding: 0;
+}

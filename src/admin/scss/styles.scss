@@ -2,8 +2,13 @@
 @import '../../mixins';
 @import '../../settings';
 
-body.wp-admin .editor-styles-wrapper {
+@import '../../common/scss/blocks/unit';
 
+body.wp-admin .editor-styles-wrapper {
+    .wp-block-helsinki-tpr-unit .hds-container {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 #helsinki-tpr-unit {
