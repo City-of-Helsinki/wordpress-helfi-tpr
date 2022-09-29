@@ -9,6 +9,11 @@
     padding-top: 64px;
     padding-bottom: 64px;
 
+    @include breakpointMax('m') {
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+
     .unit__title {
     }
 
@@ -25,12 +30,20 @@
     .tpr__container {
         margin-bottom: 24px;
 
+        @include breakpointMax('m') {
+            margin-bottom: 0;
+        }
+
         p {
             margin-bottom: spacing('s');
         }
 
         .tpr__container__column {
             margin-bottom: 24px;
+
+            @include breakpointMax('m') {
+                margin-bottom: 0;
+            }
 
             &.tpr__secondary_column {
                 @include breakpointMax('m') {
@@ -53,6 +66,7 @@
         .unit__section_title {
             display: flex;
             font-weight: bold;
+            margin-bottom: spacing('2-xs');
 
             .icon {
                 width: 24px;
@@ -68,6 +82,10 @@
         .unit__section_data {
             margin-left: 32px;
             padding-bottom: spacing('s');
+
+            @include breakpointMax('m') {
+                padding-bottom: 0;
+            }
         }
 
         .unit__image {
@@ -90,7 +108,7 @@
 
         .unit__link {
             display: flex;
-            font-weight: 700;
+            font-weight: $global-font-weight-medium;
 
             svg {
                 width: 24px;

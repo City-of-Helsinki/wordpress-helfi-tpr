@@ -360,8 +360,9 @@ function render_unit_phone_number($unit) {
 	if (!$phone) {
 		return '';
 	}
-	return sprintf('<div class="unit__phone">%s<div class="unit__section_data"><p>%s</p></div></div>',
+	return sprintf('<div class="unit__phone">%s<div class="unit__section_data"><p><a href="tel:%s">%s</a></p></div></div>',
 		render_unit_section_title(__('Phonenumber', 'helsinki-tpr'), 'blocks', 'phone'),
+		$phone,
 		$phone,
 	);
 }
@@ -371,8 +372,9 @@ function render_unit_email($unit) {
 	if (!$email) {
 		return '';
 	}
-	return sprintf('<div class="unit__email">%s<div class="unit__section_data"><p>%s</p></div></div>',
+	return sprintf('<div class="unit__email">%s<div class="unit__section_data"><p><a href="mailto:%s">%s</a></p></div></div>',
 		render_unit_section_title(__('Email', 'helsinki-tpr'), 'blocks', 'envelope'),
+		$email,
 		$email,
 	);
 }
