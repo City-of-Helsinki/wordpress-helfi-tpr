@@ -1,12 +1,12 @@
 {
-	"name": "city-of-helsinki/wordpress-helfi-linkedevents",
+	"name": "city-of-helsinki/wordpress-helfi-tpr",
 	"type": "wordpress-plugin",
 	"version": "master",
 	"authors": [
 		{
-      "name": "ArtCloud",
-      "email": "hel@artcloud.fi",
-      "homepage": "https://www.artcloud.fi"
+      "name": "Broomu Digitals",
+      "email": "info@broomudigitals.fi",
+      "homepage": "https://www.broomudigitals.fi"
     }
 	]
 }
