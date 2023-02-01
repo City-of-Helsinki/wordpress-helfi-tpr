@@ -64,6 +64,10 @@ function blocks() {
 					'type'    => 'boolean',
 					'default' => true,
 				),
+				'anchor' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
 			),
 		)
 	);
@@ -197,13 +201,20 @@ function render_unit( $attributes ) {
 		return;
 	}
 
+	$id = '';
+	if (!empty($attributes['anchor'])) {
+		$id = 'id="'.esc_attr($attributes['anchor']).'"';
+	}	
+
+
 	return sprintf(
-		'<div class="helsinki-tpr tpr-unit">
+		'<div %s class="helsinki-tpr tpr-unit">
 			<div class="hds-container">
 				%s
 				<div class="tpr__container">%s</div>
 			</div>
 		</div>',
+		$id,
 		render_unit_title( $unit->name() ?? '', $attributes['postID'] ),
 		render_unit_data( $unit, $attributes ) 
 	);

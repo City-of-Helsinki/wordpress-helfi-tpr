@@ -323,6 +323,10 @@
       showPhoto: {
         type: 'boolean',
         default: true
+      },
+      anchor: {
+        type: 'string',
+        default: ''
       }
     },
     edit: edit()
