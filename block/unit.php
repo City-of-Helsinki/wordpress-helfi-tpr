@@ -334,10 +334,9 @@ function render_unit_street_address($unit) {
 
 function render_unit_service_map_link($unit) {
 	$map_link = $unit->get_service_map_link();
-	return sprintf('<p class="unit__link"><a href="%s">%s</a>%s</p>',
+	return sprintf('<p class="unit__link"><a href="%s">%s</a></p>',
 		$map_link,
 		__('Show in map', 'helsinki-tpr'),
-		render_unit_icon('blocks', 'link-external'),
 	);
 }
 
@@ -346,10 +345,9 @@ function render_unit_hsl_route_link($unit) {
 	if (!$route_link) {
 		return '';
 	}
-	return sprintf('<p class="unit__link"><a href="%s" class="unit__link">%s</a>%s</p>',
+	return sprintf('<p class="unit__link"><a href="%s" class="unit__link">%s</a></p>',
 		$route_link,
 		__('Show route in the HSL Journey Planner', 'helsinki-tpr'),
-		render_unit_icon('blocks', 'link-external'),
 	);
 }
 
