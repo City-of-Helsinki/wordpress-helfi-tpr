@@ -1,7 +1,6 @@
 {
 	"name": "city-of-helsinki/wordpress-helfi-tpr",
 	"type": "wordpress-plugin",
-	"version": "master",
 	"authors": [
 		{
       "name": "Broomu Digitals",

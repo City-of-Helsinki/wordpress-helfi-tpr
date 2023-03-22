@@ -279,10 +279,10 @@
 
   registerBlockType('helsinki-tpr/unit', {
     apiVersion: 2,
-    title: __('Helsinki - TPR Unit', 'helsinki-tpr'),
+    title: __('Helsinki - Unit (TPR)', 'helsinki-tpr'),
     category: 'helsinki-tpr',
     icon: 'building',
-    keywords: [__('unit', 'helsinki-tpr'), __('tpr', 'helsinki-tpr')],
+    keywords: [__('unit', 'helsinki-tpr'), __('tpr', 'helsinki-tpr'), __('Helsinki - TPR Unit', 'helsinki-tpr')],
     supports: {
       html: false,
       anchor: true
