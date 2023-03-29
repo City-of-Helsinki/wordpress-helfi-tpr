@@ -14,7 +14,7 @@ use WP_Block_Editor_Context;
 function blocks() {
 	return array(
 		'unit' => array(
-			'title' => __( 'Helsinki - TPR Unit', 'helsinki-tpr' ),
+			'title' => __( 'Helsinki - Unit (TPR)', 'helsinki-tpr' ),
 			'category' => 'helsinki-tpr',
 			'dependencies' => array(
 				'wp-blocks',

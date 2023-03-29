@@ -17,7 +17,7 @@ function register() {
 	        'labels'             => array(
 		        'name'                  => __( 'TPR Units', 'helsinki-tpr' ),
 		        'singular_name'         => __( 'TPR Unit', 'helsinki-tpr' ),
-				'menu_name'             => __( 'TPR Units', 'helsinki-tpr' ),
+				'menu_name'             => __( 'Units (TPR)', 'helsinki-tpr' ),
 				'all_items'				=> __( 'Units', 'helsinki-tpr' ),
 		    ),
 	        'public'             => false,
