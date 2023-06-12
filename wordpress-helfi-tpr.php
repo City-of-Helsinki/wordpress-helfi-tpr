@@ -4,7 +4,7 @@
   * Plugin Name: Helsinki TPR
   * Description: Integration with the Helsinki TPR API.
   * Version: 1.4.0
-  * License: MIT
+  * License: GPLv3
   * Requires at least: 5.7
   * Requires PHP:      7.1
   * Author: Broomu Digitals
