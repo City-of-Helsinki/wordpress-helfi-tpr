@@ -119,6 +119,11 @@
             svg {
                 width: 24px;
                 height: 24px;
+
+                &.icon--link-external {
+                    width: 16px;
+                    height: 16px;
+                }
             }
         }
     }
