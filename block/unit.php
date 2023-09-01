@@ -345,7 +345,7 @@ function render_unit_hsl_route_link($unit) {
 	if (!$route_link) {
 		return '';
 	}
-	return sprintf('<p class="unit__link"><a href="%s" class="unit__link">%s</a></p>',
+	return sprintf('<p class="unit__link"><a href="%s">%s</a></p>',
 		$route_link,
 		__('Show route in the HSL Journey Planner', 'helsinki-tpr'),
 	);
