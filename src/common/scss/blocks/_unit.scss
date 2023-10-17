@@ -4,11 +4,11 @@
     background-color: rgb(247, 247, 248);
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
-	margin-bottom: spacing('l');
     max-width: 100vw;
     width: 100vw;
     padding-top: 64px;
     padding-bottom: 64px;
+    @extend %helsinki-block-spacing;
 
 	@include breakpoint('m') {
 		margin-bottom: spacing('4-xl');
@@ -21,6 +21,7 @@
     }
 
     .unit__title {
+        margin-top: 0;
     }
 
     .hds-container {
@@ -34,6 +35,11 @@
 
 
     .tpr__container {
+
+        &:not(:first-child) {
+            @extend %helsinki-block-content-spacing;
+        }
+
         margin-bottom: 24px;
 
         @include breakpointMax('m') {
@@ -124,7 +130,8 @@
 
 .has-sidebar .helsinki-tpr.tpr-unit {
     background-color: transparent;
-    margin: 0 auto var(--spacing-layout-l);
+    margin-left: auto;
+    margin-right: auto;
     width: auto;
     max-width: none;
     padding: 0;
