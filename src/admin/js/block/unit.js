@@ -66,7 +66,12 @@
             title: __( 'Settings', 'helsinki-tpr' ),
             initialOpen: true,
           },
-          configSelectControl(props)
+          configSelectControl(props),
+          unitTitleControl({
+            label: __( 'Title', 'helsinki-tpr' ),
+            value: props.attributes.unitTitle,
+            attribute: 'unitTitle',
+          }, props)
         )
       );
     }
@@ -147,7 +152,25 @@
                 }
             )
         );
-        }
+    }
+
+    function unitTitleControl(config, props) {
+        return createElement(
+            PanelRow, {},
+            createElement(
+                TextControl,
+                {
+                    label: config.label,
+                    value: config.value,
+                    onChange: function(value) {
+                        var newAttributes = {};
+                        newAttributes[config.attribute] = value;
+                        props.setAttributes(newAttributes);
+                    }
+                }
+            )
+        );
+    }
     
     /**
       * Elements
@@ -193,6 +216,10 @@
                 postID: {
                     type: 'string',
                     default: 0,
+                },
+                unitTitle: {
+                  type: 'string',
+                  default: '',
                 },
                 showStreetAddress: {
                     type: 'boolean',

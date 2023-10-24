@@ -32,6 +32,10 @@ function blocks() {
 					'type' => 'string',
 					'default' => 0,
 				),
+				'unitTitle' => array(
+					'type' => 'string',
+					'default' => '',
+				),
 				'showStreetAddress' => array(
 					'type'    => 'boolean',
 					'default' => true,
@@ -206,6 +210,12 @@ function render_unit( $attributes ) {
 		$id = 'id="'.esc_attr($attributes['anchor']).'"';
 	}	
 
+	$name = '';
+	if (!empty($attributes['unitTitle'])) {
+		$name = $attributes['unitTitle'];
+	} else {
+		$name = $unit->name();
+	}
 
 	return sprintf(
 		'<div %s class="helsinki-tpr tpr-unit">
@@ -215,7 +225,7 @@ function render_unit( $attributes ) {
 			</div>
 		</div>',
 		$id,
-		render_unit_title( $unit->name() ?? '', $attributes['postID'] ),
+		render_unit_title( $name ?? '', $attributes['postID'] ),
 		render_unit_data( $unit, $attributes ) 
 	);
 }
