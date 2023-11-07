@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Helsinki TPR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-24 09:50+0000\n"
+"POT-Creation-Date: 2023-11-07 10:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "Add new units"
 msgstr ""
 
-#: block/unit.php:444 views/metabox/unit-data.php:20
+#: block/unit.php:452 views/metabox/unit-data.php:20
 #: views/metabox/unit-data.php:33 views/metabox/unit-data.php:46
 msgid "Additional information"
 msgstr ""
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: block/unit.php:395 views/metabox/unit-data.php:15
+#: block/unit.php:398 views/metabox/unit-data.php:15
 #: views/metabox/unit-data.php:28 views/metabox/unit-data.php:41
 msgid "Email"
 msgstr ""
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: block/unit.php:407 views/metabox/unit-data.php:19
+#: block/unit.php:415 views/metabox/unit-data.php:19
 #: views/metabox/unit-data.php:32 views/metabox/unit-data.php:45
 msgid "Open hours"
 msgstr ""
@@ -114,16 +114,12 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: block/unit.php:418
-msgid "Other links"
-msgstr ""
-
 #: views/metabox/unit-data.php:14 views/metabox/unit-data.php:27
 #: views/metabox/unit-data.php:40
 msgid "Phone"
 msgstr ""
 
-#: block/unit.php:383
+#: block/unit.php:386
 msgid "Phonenumber"
 msgstr ""
 
@@ -132,7 +128,7 @@ msgstr ""
 msgid "Postal Address"
 msgstr ""
 
-#: block/unit.php:372
+#: block/unit.php:375
 msgid "Postal address"
 msgstr ""
 
@@ -160,10 +156,6 @@ msgstr ""
 msgid "Show email"
 msgstr ""
 
-#: block/unit.php:349
-msgid "Show in map"
-msgstr ""
-
 #: assets/admin/js/scripts.js:229 src/admin/js/block/unit.js:113
 msgid "Show open hours"
 msgstr ""
@@ -180,7 +172,7 @@ msgstr ""
 msgid "Show postal address"
 msgstr ""
 
-#: block/unit.php:360
+#: block/unit.php:363
 msgid "Show route in the HSL Journey Planner"
 msgstr ""
 
@@ -197,7 +189,7 @@ msgstr ""
 msgid "Street Address"
 msgstr ""
 
-#: block/unit.php:338
+#: block/unit.php:342
 msgid "Street address"
 msgstr ""
 
@@ -235,6 +227,10 @@ msgstr ""
 
 #: cpt/unit-config.php:20
 msgid "Units (TPR)"
+msgstr ""
+
+#: block/unit.php:426
+msgid "Website link"
 msgstr ""
 
 #: views/metabox/unit-data.php:16 views/metabox/unit-data.php:29
