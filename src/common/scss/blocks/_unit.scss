@@ -25,12 +25,6 @@
     }
 
     .hds-container {
-        padding: 0;
-
-        @include breakpointMax('m') {
-            padding-left: spacing('s');
-            padding-right: spacing('s');
-        }
     }
 
 
@@ -129,10 +123,24 @@
 }
 
 .has-sidebar .helsinki-tpr.tpr-unit {
-    background-color: transparent;
     margin-left: auto;
     margin-right: auto;
     width: auto;
     max-width: none;
-    padding: 0;
+    padding: spacing('l');
+
+    .hds-container {
+        padding: 0;
+    }
+
+    @include breakpointMax('l') {
+        padding: spacing('l') spacing('s');
+    }
+
+    @include breakpointMax('m') {
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        max-width: 100vw;
+        width: 100vw;
+    }
 }

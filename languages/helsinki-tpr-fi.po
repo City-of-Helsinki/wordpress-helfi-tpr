@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Helsinki TPR\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-21 10:11+0000\n"
-"PO-Revision-Date: 2023-03-22 07:46+0000\n"
+"PO-Revision-Date: 2023-11-07 10:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: Suomi\n"
 "Language: fi\n"
@@ -27,7 +27,7 @@ msgstr "Lisää uusi toimipiste"
 msgid "Add new units"
 msgstr "Lisää uusia toimipisteitä"
 
-#: block/unit.php:434 views/metabox/unit-data.php:20
+#: block/unit.php:452 views/metabox/unit-data.php:20
 #: views/metabox/unit-data.php:33 views/metabox/unit-data.php:46
 msgid "Additional information"
 msgstr "Lisätiedot"
@@ -40,7 +40,7 @@ msgstr "Broomu Digitals"
 msgid "Description"
 msgstr "Kuvaus"
 
-#: block/unit.php:385 views/metabox/unit-data.php:15
+#: block/unit.php:398 views/metabox/unit-data.php:15
 #: views/metabox/unit-data.php:28 views/metabox/unit-data.php:41
 msgid "Email"
 msgstr "Sähköposti"
@@ -53,16 +53,16 @@ msgstr "Englanti"
 msgid "Finnish"
 msgstr "Suomi"
 
-#: block/unit.php:97
+#: block/unit.php:101
 msgid "Helsinki"
 msgstr "Helsinki"
 
-#: assets/admin/js/scripts.js:285 src/admin/js/block/unit.js:187
+#: assets/admin/js/scripts.js:301 src/admin/js/block/unit.js:210
 msgid "Helsinki - TPR Unit"
 msgstr "Helsinki - TPR Toimipiste"
 
-#: block/unit.php:17 assets/admin/js/scripts.js:282
-#: src/admin/js/block/unit.js:184
+#: block/unit.php:17 assets/admin/js/scripts.js:298
+#: src/admin/js/block/unit.js:207
 msgid "Helsinki - Unit (TPR)"
 msgstr "Helsinki - Toimipiste (TPR)"
 
@@ -83,7 +83,7 @@ msgstr "Kuva"
 msgid "Import unit"
 msgstr "Lisää toimipiste"
 
-#: assets/admin/js/scripts.js:202 src/admin/js/block/unit.js:79
+#: assets/admin/js/scripts.js:206 src/admin/js/block/unit.js:84
 msgid "Information"
 msgstr "Tiedot"
 
@@ -100,7 +100,7 @@ msgstr "Ladataan"
 msgid "Name"
 msgstr "Nimi"
 
-#: block/unit.php:397 views/metabox/unit-data.php:19
+#: block/unit.php:415 views/metabox/unit-data.php:19
 #: views/metabox/unit-data.php:32 views/metabox/unit-data.php:45
 msgid "Open hours"
 msgstr "Aukioloajat"
@@ -113,16 +113,12 @@ msgstr "Avaa julkaisu"
 msgid "Options"
 msgstr "Vaihtoehdot"
 
-#: block/unit.php:408
-msgid "Other links"
-msgstr "Muualla verkossa"
-
 #: views/metabox/unit-data.php:14 views/metabox/unit-data.php:27
 #: views/metabox/unit-data.php:40
 msgid "Phone"
 msgstr "Puhelin"
 
-#: block/unit.php:373
+#: block/unit.php:386
 msgid "Phonenumber"
 msgstr "Puhelinnumero"
 
@@ -131,7 +127,7 @@ msgstr "Puhelinnumero"
 msgid "Postal Address"
 msgstr "Postiosoite"
 
-#: block/unit.php:362
+#: block/unit.php:375
 msgid "Postal address"
 msgstr "Postiosoite"
 
@@ -151,43 +147,39 @@ msgstr "Valitse toimipiste"
 msgid "Settings"
 msgstr "Asetukset"
 
-#: assets/admin/js/scripts.js:233 src/admin/js/block/unit.js:118
+#: assets/admin/js/scripts.js:237 src/admin/js/block/unit.js:123
 msgid "Show additional information"
 msgstr "Näytä lisätiedot"
 
-#: assets/admin/js/scripts.js:221 src/admin/js/block/unit.js:103
+#: assets/admin/js/scripts.js:225 src/admin/js/block/unit.js:108
 msgid "Show email"
 msgstr "Näytä sähköposti"
 
-#: block/unit.php:339
-msgid "Show in map"
-msgstr "Näytä kartalla"
-
-#: assets/admin/js/scripts.js:225 src/admin/js/block/unit.js:108
+#: assets/admin/js/scripts.js:229 src/admin/js/block/unit.js:113
 msgid "Show open hours"
 msgstr "Näytä aukioloajat"
 
-#: assets/admin/js/scripts.js:217 src/admin/js/block/unit.js:98
+#: assets/admin/js/scripts.js:221 src/admin/js/block/unit.js:103
 msgid "Show phone"
 msgstr "Näytä puhelinnumero"
 
-#: assets/admin/js/scripts.js:205 src/admin/js/block/unit.js:83
+#: assets/admin/js/scripts.js:209 src/admin/js/block/unit.js:88
 msgid "Show photo"
 msgstr "Näytä kuva"
 
-#: assets/admin/js/scripts.js:213 src/admin/js/block/unit.js:93
+#: assets/admin/js/scripts.js:217 src/admin/js/block/unit.js:98
 msgid "Show postal address"
 msgstr "Näytä postiosoite"
 
-#: block/unit.php:350
+#: block/unit.php:363
 msgid "Show route in the HSL Journey Planner"
 msgstr "Näytä reitti HSL-reittioppaasta"
 
-#: assets/admin/js/scripts.js:209 src/admin/js/block/unit.js:88
+#: assets/admin/js/scripts.js:213 src/admin/js/block/unit.js:93
 msgid "Show street address"
 msgstr "Näytä käyntiosoite"
 
-#: assets/admin/js/scripts.js:229 src/admin/js/block/unit.js:113
+#: assets/admin/js/scripts.js:233 src/admin/js/block/unit.js:118
 msgid "Show website"
 msgstr "Näytä verkkosivu"
 
@@ -196,7 +188,7 @@ msgstr "Näytä verkkosivu"
 msgid "Street Address"
 msgstr "Osoite"
 
-#: block/unit.php:328
+#: block/unit.php:342
 msgid "Street address"
 msgstr "Käyntiosoite"
 
@@ -204,7 +196,11 @@ msgstr "Käyntiosoite"
 msgid "Swedish"
 msgstr "Ruotsi"
 
-#: assets/admin/js/scripts.js:285 src/admin/js/block/unit.js:187
+#: assets/admin/js/scripts.js:198 src/admin/js/block/unit.js:71
+msgid "Title"
+msgstr "Otsikko"
+
+#: assets/admin/js/scripts.js:301 src/admin/js/block/unit.js:210
 msgid "tpr"
 msgstr "tpr"
 
@@ -216,7 +212,7 @@ msgstr "TPR Toimipiste"
 msgid "TPR Units"
 msgstr "TPR Toimipisteet"
 
-#: assets/admin/js/scripts.js:285 src/admin/js/block/unit.js:187
+#: assets/admin/js/scripts.js:301 src/admin/js/block/unit.js:210
 msgid "unit"
 msgstr "toimipiste"
 
@@ -231,6 +227,10 @@ msgstr "Toimipisteet"
 #: cpt/unit-config.php:20
 msgid "Units (TPR)"
 msgstr "Toimipisteet (TPR)"
+
+#: block/unit.php:426
+msgid "Website link"
+msgstr "Verkkosivun linkki"
 
 #: views/metabox/unit-data.php:16 views/metabox/unit-data.php:29
 #: views/metabox/unit-data.php:42
