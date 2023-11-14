@@ -3,7 +3,7 @@
 /**
   * Plugin Name: Helsinki TPR
   * Description: Integration with the Helsinki TPR API.
-  * Version: 1.7.0
+  * Version: 1.8.0
   * License: GPLv3
   * Requires at least: 5.7
   * Requires PHP:      7.1
