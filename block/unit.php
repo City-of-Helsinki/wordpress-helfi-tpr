@@ -32,6 +32,10 @@ function blocks() {
 					'type' => 'string',
 					'default' => 0,
 				),
+				'unitTitle' => array(
+					'type' => 'string',
+					'default' => '',
+				),
 				'showStreetAddress' => array(
 					'type'    => 'boolean',
 					'default' => true,
@@ -206,6 +210,12 @@ function render_unit( $attributes ) {
 		$id = 'id="'.esc_attr($attributes['anchor']).'"';
 	}	
 
+	$name = '';
+	if (!empty($attributes['unitTitle'])) {
+		$name = $attributes['unitTitle'];
+	} else {
+		$name = $unit->name();
+	}
 
 	return sprintf(
 		'<div %s class="helsinki-tpr tpr-unit">
@@ -215,7 +225,7 @@ function render_unit( $attributes ) {
 			</div>
 		</div>',
 		$id,
-		render_unit_title( $unit->name() ?? '', $attributes['postID'] ),
+		render_unit_title( $name ?? '', $attributes['postID'] ),
 		render_unit_data( $unit, $attributes ) 
 	);
 }
@@ -305,7 +315,7 @@ function render_unit_secondary_column($unit, $attributes) {
 }
 
 function render_unit_section_title($title, $iconType, $icon) {
-	return sprintf('<div class="unit__section_title">%s<div>%s</div></div>', render_unit_icon($iconType, $icon), $title);
+	return sprintf('<div class="unit__section_title">%s<div>%s:</div></div>', render_unit_icon($iconType, $icon), $title);
 }
 
 function render_unit_icon($type, $icon) {
@@ -315,28 +325,31 @@ function render_unit_icon($type, $icon) {
 function render_unit_street_address($unit) {
 	$parts = array();
 	if (!empty($unit->street_address())) {
-		$parts[] = sprintf('<div>%s</div>', $unit->street_address());
+		if (!empty($unit->address_zip()) || !empty($unit->address_city())) {
+			$parts[] = sprintf('%s,', $unit->street_address());
+		} else {
+			$parts[] = sprintf('%s', $unit->street_address());
+		}
 	}
 	if (!empty($unit->address_zip())) {
-		$parts[] = sprintf('<div>%s</div>', $unit->address_zip());
+		$parts[] = sprintf('%s', $unit->address_zip());
 	}
 	if (!empty($unit->address_city())) {
-		$parts[] = sprintf('<div>%s</div>', $unit->address_city());
+		$parts[] = sprintf('%s', $unit->address_city());
 	}
 
-	return sprintf('<div class="unit__street_address">%s<div class="unit__section_data">%s<p></p>%s%s</div></div>',
+	return sprintf('<div class="unit__street_address">%s<div class="unit__section_data">%s<p></p>%s</div></div>',
 		render_unit_section_title(__('Street address', 'helsinki-tpr'), 'blocks', 'location'),
-		implode('', $parts),
-		render_unit_service_map_link($unit),
+		render_unit_service_map_link($unit, implode(' ', $parts)),
 		render_unit_hsl_route_link($unit)
 	);
 }
 
-function render_unit_service_map_link($unit) {
+function render_unit_service_map_link($unit, $text) {
 	$map_link = $unit->get_service_map_link();
-	return sprintf('<p class="unit__link"><a href="%s">%s</a></p>',
+	return sprintf('<p><a href="%s">%s</a></p>',
 		$map_link,
-		__('Show in map', 'helsinki-tpr'),
+		$text,
 	);
 }
 
@@ -393,6 +406,11 @@ function render_unit_open_hours($unit) {
 	if (!$hours) {
 		return '';
 	}
+
+	$hours = array_map(function($item) {
+		return nl2br($item);
+	}, $hours);
+
 	return sprintf('<div class="unit__open_hours">%s<div class="unit__section_data">%s</div></div>',
 		render_unit_section_title(__('Open hours', 'helsinki-tpr'), 'blocks', 'clock'),
 		'<p>' . implode('</p><p>', $hours) . '</p>',
@@ -405,7 +423,7 @@ function render_unit_website($unit) {
 		return '';
 	}
 	return sprintf('<div class="unit__website">%s<div class="unit__section_data"><p><a href="%s">%s</a></p></div></div>',
-		render_unit_section_title(__('Other links', 'helsinki-tpr'), 'blocks', 'globe'),
+		render_unit_section_title(__('Website link', 'helsinki-tpr'), 'blocks', 'arrow-right'),
 		$weburl,
 		$weburl,
 	);
