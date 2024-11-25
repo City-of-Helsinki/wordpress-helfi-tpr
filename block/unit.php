@@ -5,6 +5,8 @@ namespace CityOfHelsinki\WordPress\TPR\Blocks;
 use ArtCloud\Helsinki\Plugin\HDS\Svg;
 use CityOfHelsinki\WordPress\TPR as Plugin;
 use CityOfHelsinki\WordPress\TPR\Api\Units;
+use CityOfHelsinki\WordPress\TPR\Api\Entities\Unit;
+use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Connection;
 
 use WP_Block_Editor_Context;
 
@@ -208,7 +210,7 @@ function render_unit( $attributes ) {
 	$id = '';
 	if (!empty($attributes['anchor'])) {
 		$id = 'id="'.esc_attr($attributes['anchor']).'"';
-	}	
+	}
 
 	$name = '';
 	if (!empty($attributes['unitTitle'])) {
@@ -226,7 +228,7 @@ function render_unit( $attributes ) {
 		</div>',
 		$id,
 		render_unit_title( $name ?? '', $attributes['postID'] ),
-		render_unit_data( $unit, $attributes ) 
+		render_unit_data( $unit, $attributes )
 	);
 }
 
@@ -401,20 +403,34 @@ function render_unit_email($unit) {
 	);
 }
 
-function render_unit_open_hours($unit) {
-	$hours = $unit->open_hours();
-	if (!$hours) {
+function render_unit_open_hours( Unit $unit ): string {
+	if ( ! $unit->open_hours() ) {
 		return '';
 	}
 
-	$hours = array_map(function($item) {
-		return nl2br($item);
-	}, $hours);
+	$current_lang = function_exists( 'pll_default_language' )
+		? pll_default_language()
+		: get_locale();
 
-	return sprintf('<div class="unit__open_hours">%s<div class="unit__section_data">%s</div></div>',
-		render_unit_section_title(__('Open hours', 'helsinki-tpr'), 'blocks', 'clock'),
-		'<p>' . implode('</p><p>', $hours) . '</p>',
+	return sprintf(
+		'<div class="unit__open_hours">
+			%s
+			<div class="unit__section_data">
+				%s
+			</div>
+		</div>',
+		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
+		implode( '', array_map(
+			function ( Connection $connection ) use ( $current_lang ) {
+				return render_unit_connection( $connection, $current_lang );
+			},
+			$unit->open_hours()
+		) ),
 	);
+}
+
+function render_unit_connection( Connection $connection, string $lang ): string {
+	return $connection->to_html( $lang );
 }
 
 function render_unit_website($unit) {
