@@ -422,15 +422,11 @@ function render_unit_open_hours( Unit $unit ): string {
 		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
 		implode( '', array_map(
 			function ( Connection $connection ) use ( $current_lang ) {
-				return render_unit_connection( $connection, $current_lang );
+				return $connection->to_html( $current_lang );
 			},
 			$unit->open_hours()
 		) ),
 	);
-}
-
-function render_unit_connection( Connection $connection, string $lang ): string {
-	return $connection->to_html( $lang );
 }
 
 function render_unit_website($unit) {
