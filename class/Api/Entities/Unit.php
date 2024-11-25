@@ -108,10 +108,20 @@ class Unit extends Entity
         return $this->key_by_language( 'address_postal_full', null, $language );
     }
 
-    public function open_hours( string $language = null ): ?array
+    public function open_hours( string $deprecated = null ): ?array
 	{
         return $this->connections['OPENING_HOURS'] ?? array();
     }
+
+	public function open_hours_html( string $language ): array
+	{
+		return array_map(
+			function ( Connection $connection ) use ( $language ) {
+				return $connection->to_html( $language );
+			},
+			$this->open_hours()
+		);
+	}
 
     public function additional_info( string $language = null ): ?array
 	{
