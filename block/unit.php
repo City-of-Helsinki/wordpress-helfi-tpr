@@ -420,12 +420,7 @@ function render_unit_open_hours( Unit $unit ): string {
 			</div>
 		</div>',
 		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
-		implode( '', array_map(
-			function ( Connection $connection ) use ( $current_lang ) {
-				return $connection->to_html( $current_lang );
-			},
-			$unit->open_hours()
-		) ),
+		implode( '', $unit->open_hours_html( $current_lang ) ),
 	);
 }
 
