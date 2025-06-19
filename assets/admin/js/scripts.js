@@ -214,25 +214,33 @@
       checked: props.attributes.showStreetAddress,
       attribute: 'showStreetAddress'
     }, props), infoToggleControl({
-      label: __('Show postal address', 'helsinki-tpr'),
-      checked: props.attributes.showPostalAddress,
-      attribute: 'showPostalAddress'
+      label: __('Show email', 'helsinki-tpr'),
+      checked: props.attributes.showEmail,
+      attribute: 'showEmail'
     }, props), infoToggleControl({
       label: __('Show phone', 'helsinki-tpr'),
       checked: props.attributes.showPhone,
       attribute: 'showPhone'
     }, props), infoToggleControl({
-      label: __('Show email', 'helsinki-tpr'),
-      checked: props.attributes.showEmail,
-      attribute: 'showEmail'
-    }, props), infoToggleControl({
       label: __('Show open hours', 'helsinki-tpr'),
       checked: props.attributes.showOpenHours,
       attribute: 'showOpenHours'
     }, props), infoToggleControl({
+      label: __('Show service language', 'helsinki-tpr'),
+      checked: props.attributes.showServiceLanguage,
+      attribute: 'showServiceLanguage'
+    }, props), infoToggleControl({
       label: __('Show website', 'helsinki-tpr'),
       checked: props.attributes.showWebsite,
       attribute: 'showWebsite'
+    }, props), infoToggleControl({
+      label: __('Show postal address', 'helsinki-tpr'),
+      checked: props.attributes.showPostalAddress,
+      attribute: 'showPostalAddress'
+    }, props), infoToggleControl({
+      label: __('Show directions', 'helsinki-tpr'),
+      checked: props.attributes.showDirections,
+      attribute: 'showDirections'
     }, props), infoToggleControl({
       label: __('Show additional information', 'helsinki-tpr'),
       checked: props.attributes.showAdditionalInfo,
@@ -325,6 +333,14 @@
         default: true
       },
       showEmail: {
+        type: 'boolean',
+        default: true
+      },
+      showDirections: {
+        type: 'boolean',
+        default: true
+      },
+      showServiceLanguage: {
         type: 'boolean',
         default: true
       },
