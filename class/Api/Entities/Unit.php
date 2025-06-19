@@ -123,6 +123,16 @@ class Unit extends Entity
 		);
 	}
 
+    public function available_languages(): array
+	{
+		$data = (array) $this->entity_data->service_descriptions ?? null;
+		if ( $data ) {
+			return $data[0]['available_languages'] ?? array();
+		}
+
+		return array();
+    }
+
     public function additional_info( string $language = null ): ?array
 	{
         $connections = $this->entity_data->connections ?? null;
