@@ -8,156 +8,123 @@
 
 namespace CityOfHelsinki\WordPress\TPR\Api\Entities;
 
+use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Connection;
 use DateTime;
 use Exception;
 
 /**
  * Class Event
  */
-class Unit extends Entity {
-
-    /**
-     * Event settings
-     *
-     * @var array
-     */
+class Unit extends Entity
+{
     private array $settings;
+	private array $connections;
 
-    /**
-     * Event constructor.
-     *
-     * @param mixed $entity_data Entity data.
-     * @param array $settings    Event settings.
-     */
     public function __construct( $entity_data, array $settings = [] ) {
         $this->settings = $settings;
 
         parent::__construct( $entity_data );
+
+		$this->setup_connections();
     }
 
-    /**
-     * Get Id
-     *
-     * @return mixed
-     */
-    public function id() {
-        return $this->entity_data->id;
+	private function setup_connections(): void
+	{
+		$this->connections = array();
+
+		if ( ! empty( $this->entity_data->connections ) ) {
+			$this->add_connections( (array) $this->entity_data->connections );
+		}
+	}
+
+	private function add_connections( array $data ): void
+	{
+		array_walk( $data, array( $this, 'add_connection' ) );
+	}
+
+	private function add_connection( $data ): void
+	{
+		$connection = new Connection( (array) $data );
+
+		if ( ! isset( $this->connections[$connection->type()] ) ) {
+			$this->connections[$connection->type()] = array();
+		}
+
+		$this->connections[$connection->type()][] = $connection;
+	}
+
+    public function id(): string
+	{
+        return (string) $this->entity_data->id;
     }
 
-    /**
-     * Get name
-     *
-     * @return string|null
-     */
-    public function name($language = null) {
-        return $this->key_by_language( 'name', null, $language);
+    public function name( string $language = null ): ?string
+	{
+        return $this->key_by_language( 'name', null, $language );
     }
 
-    /**
-     * Get short description
-     *
-     * @return string|null
-     */
-    public function short_description($language = null) {
+    public function short_description( string $language = null ): ?string
+	{
         return $this->key_by_language( 'short_description', null, $language );
     }
 
-    /**
-     * Get description
-     *
-     * @return string|null
-     */
-    public function description($language = null) {
+    public function description( string $language = null ): ?string
+	{
         return $this->key_by_language( 'description', null, $language );
     }
 
-    /**
-     * Get phone
-     *
-     * @return string|null
-     */
-    public function phone() {
+    public function phone(): ?string
+	{
         return $this->entity_data->phone ?? null;
     }
 
-    /**
-     * Get email
-     *
-     * @return string|null
-     */
-    public function email() {
+    public function email(): ?string
+	{
         return $this->entity_data->email ?? null;
     }
 
-    /**
-     * Get website url
-     *
-     * @return string|null
-     */
-    public function website_url($language = null) {
+    public function website_url( string $language = null ): ?string
+	{
         return $this->key_by_language( 'www', null, $language );
     }
 
-    /**
-     * Get street address
-     *
-     * @return string|null
-     */
-    public function street_address($language = null) {
+    public function street_address( string $language = null ): ?string
+	{
         return $this->key_by_language( 'street_address', null, $language );
     }
 
-    /**
-     * Get address zip
-     *
-     * @return string|null
-     */
-    public function address_zip() {
+    public function address_zip(): ?string
+	{
         return $this->entity_data->address_zip ?? null;
     }
 
-    /**
-     * Get address city
-     *
-     * @return string|null
-     */
-    public function address_city($language = null) {
+    public function address_city( string $language = null ): ?string
+	{
         return $this->key_by_language( 'address_city', null, $language );
     }
 
-    /**
-     * Get postal address
-     *
-     * @return string|null
-     */
-    public function postal_address($language = null) {
+    public function postal_address( string $language = null ): ?string
+	{
         return $this->key_by_language( 'address_postal_full', null, $language );
     }
 
-    /**
-     * Get open hours
-     *
-     * @return array|null
-     */
-    public function open_hours($language = null) {
-        $connections = $this->entity_data->connections ?? null;
-        $open_hours = array();
-        if ($connections) {
-            foreach ($connections as $section) {
-                if ($this->get_property($section, 'section_type') == 'OPENING_HOURS') {
-                    $open_hours[] = $this->key_by_language( 'name', $section, $language );
-                }
-            }
-        }
-        return $open_hours;
+    public function open_hours( string $deprecated = null ): ?array
+	{
+        return $this->connections['OPENING_HOURS'] ?? array();
     }
 
-    /**
-     * Get additional info
-     *
-     * @return array|null
-     */
-    public function additional_info($language = null) {
+	public function open_hours_html( string $language ): array
+	{
+		return array_map(
+			function ( Connection $connection ) use ( $language ) {
+				return $connection->to_html( $language );
+			},
+			$this->open_hours()
+		);
+	}
+
+    public function additional_info( string $language = null ): ?array
+	{
         $connections = $this->entity_data->connections ?? null;
         $additional_info = array();
         if ($connections) {
@@ -170,7 +137,8 @@ class Unit extends Entity {
         return $additional_info;
     }
 
-	protected static function get_property( $item, $property ) {
+	protected static function get_property( $item, $property )
+	{
 		if ( is_object( $item ) ) {
 			return property_exists( $item, $property ) ? (array) $item->{$property} : [];
 		} else {
@@ -178,7 +146,8 @@ class Unit extends Entity {
 		}
 	}
 
-    public function get_service_map_link() {
+    public function get_service_map_link(): ?string
+	{
         $allowed_langs = array(
             'fi',
             'en',
@@ -196,7 +165,8 @@ class Unit extends Entity {
         return 'https://palvelukartta.hel.fi/' . $current_lang . '/unit/' . $this->id();
     }
 
-    public function get_hsl_route_link() {
+    public function get_hsl_route_link(): ?string
+	{
         $allowed_langs = array(
             'fi',
             'en',
@@ -216,7 +186,7 @@ class Unit extends Entity {
             return null;
         }
 
-        return sprintf('https://reittiopas.hsl.fi/%s/reitti/POS/', 
+        return sprintf('https://reittiopas.hsl.fi/%s/reitti/POS/',
             $current_lang,
         ) . rawurlencode(sprintf('%s, %s::%s,%s',
             $this->street_address(),
@@ -224,50 +194,36 @@ class Unit extends Entity {
             $this->get_latitude(),
             $this->get_longitude(),
         ));
-;
-
     }
 
-    public function get_latitude() {
+    public function get_latitude(): ?float
+	{
         return $this->entity_data->latitude ?? null;
     }
 
-    public function get_longitude() {
+    public function get_longitude(): ?float
+	{
         return $this->entity_data->longitude ?? null;
     }
 
-
-    /**
-     * Get image url
-     *
-     * @return string|null
-     */
-    public function image_url() {
+    public function image_url(): ?string
+	{
         return $this->entity_data->picture_url ?? null;
     }
 
-    /**
-     * Get image alt text
-     *
-     * @return string
-     */
-    public function image_alt_text($language = null) {
+    public function image_alt_text( string $language = null ): ?string
+	{
         return $this->key_by_language( 'picture_caption', null, $language );
     }
 
-	/**
-     * Get img tag
-     *
-     * @return string
-     */
-	public function html_img($language = null) {
-		if ( ! $this->image_url() ) {
-			return '';
-		}
-		return sprintf(
-			'<img src="%s" alt="%s">',
-			esc_url( $this->image_url() ),
-			esc_attr( $this->image_alt_text($language) )
-		);
+	public function html_img( string $language = null ): string
+	{
+		return $this->image_url()
+			? sprintf(
+				'<img src="%s" alt="%s">',
+				esc_url( $this->image_url() ),
+				esc_attr( $this->image_alt_text($language) )
+			)
+			: '';
 	}
 }
