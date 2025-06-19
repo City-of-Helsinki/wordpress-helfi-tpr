@@ -39,8 +39,8 @@ abstract class AbstractConnectionType implements ConnectionTypeInterface
 
 		return ( $url && $anchor ) ? sprintf(
 			'<a href="%s">%s</a>',
-			esc_url( $url ),
-			esc_html( $anchor )
+			\esc_url( $url ),
+			\esc_html( $anchor )
 		) : '';
 	}
 
@@ -50,7 +50,7 @@ abstract class AbstractConnectionType implements ConnectionTypeInterface
 
 		return $content ? sprintf(
 			'<p>%s</p>',
-			wp_kses_post( wpautop( $content ) )
+			\wp_kses_post( \wpautop( $content ) )
 		) : '';
 	}
 }
