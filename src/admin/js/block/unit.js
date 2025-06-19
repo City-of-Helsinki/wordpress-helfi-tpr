@@ -9,7 +9,7 @@
         { withSelect } = wp.data,
         { compose } = wp.compose,
         { InspectorControls } = wp.editor;
-  
+
     const UnitConfigSelect = compose(withSelect(function(select, selectProps){
       return {posts: select('core').getEntityRecords(
         'postType',
@@ -22,14 +22,14 @@
         }
       )};
     }))(function(props){
-  
+
       var options = [];
       if ( props.posts ) {
         options.push({
           value: 0,
           label: __( 'Select unit', 'helsinki-tpr' )}
         );
-  
+
         props.posts.forEach( function(post) {
           options.push({
             value:post.id,
@@ -42,7 +42,7 @@
           label: __( 'Loading', 'helsinki-tpr' )}
         );
       }
-  
+
       return createElement(SelectControl, {
         label: __( 'Unit selection', 'helsinki-tpr' ),
         value: props.attributes.postID,
@@ -54,7 +54,7 @@
         options: options,
       });
     });
-  
+
     /**
       * InspectorControls
       */
@@ -95,9 +95,9 @@
                 attribute: 'showStreetAddress',
             }, props),
             infoToggleControl({
-                label: __( 'Show postal address', 'helsinki-tpr' ),
-                checked: props.attributes.showPostalAddress,
-                attribute: 'showPostalAddress',
+                label: __( 'Show email', 'helsinki-tpr' ),
+                checked: props.attributes.showEmail,
+                attribute: 'showEmail',
             }, props),
             infoToggleControl({
                 label: __( 'Show phone', 'helsinki-tpr' ),
@@ -105,19 +105,29 @@
                 attribute: 'showPhone',
             }, props),
             infoToggleControl({
-                label: __( 'Show email', 'helsinki-tpr' ),
-                checked: props.attributes.showEmail,
-                attribute: 'showEmail',
-            }, props),
-            infoToggleControl({
                 label: __( 'Show open hours', 'helsinki-tpr' ),
                 checked: props.attributes.showOpenHours,
                 attribute: 'showOpenHours',
             }, props),
             infoToggleControl({
+                label: __( 'Show service language', 'helsinki-tpr' ),
+                checked: props.attributes.showServiceLanguage,
+                attribute: 'showServiceLanguage',
+            }, props),
+            infoToggleControl({
                 label: __( 'Show website', 'helsinki-tpr' ),
                 checked: props.attributes.showWebsite,
                 attribute: 'showWebsite',
+            }, props),
+            infoToggleControl({
+                label: __( 'Show postal address', 'helsinki-tpr' ),
+                checked: props.attributes.showPostalAddress,
+                attribute: 'showPostalAddress',
+            }, props),
+            infoToggleControl({
+                label: __( 'Show directions', 'helsinki-tpr' ),
+                checked: props.attributes.showDirections,
+                attribute: 'showDirections',
             }, props),
             infoToggleControl({
                 label: __( 'Show additional information', 'helsinki-tpr' ),
@@ -127,7 +137,7 @@
           )
         );
       }
-  
+
 
     function configSelectControl(props) {
       return createElement(
@@ -171,7 +181,7 @@
             )
         );
     }
-    
+
     /**
       * Elements
       */
@@ -184,7 +194,7 @@
         })
       );
     }
-  
+
     /**
       * Edit
       */
@@ -198,7 +208,7 @@
         );
       }
     }
-  
+
     /**
       * Register
       */
@@ -237,6 +247,14 @@
                     type: 'boolean',
                     default: true,
                 },
+                showDirections: {
+                    type: 'boolean',
+                    default: true,
+                },
+                showServiceLanguage: {
+                    type: 'boolean',
+                    default: true,
+                },
                 showOpenHours: {
                     type: 'boolean',
                     default: true,
@@ -256,10 +274,9 @@
 				anchor: {
 					type: 'string',
 					default: '',
-				},	
+				},
           },
           edit: edit(),
       });
-  
+
   })(window.wp);
-  
