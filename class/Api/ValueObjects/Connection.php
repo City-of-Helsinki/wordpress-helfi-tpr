@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\ConnectionTypeInterface;
-use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\EServiceLinkConnection;
-use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\LinkConnection;
-use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\OpeningHourConnection;
 
 class Connection
 {
@@ -80,6 +77,7 @@ class Connection
 	{
 		$types = array(
 			'ESERVICE_LINK' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\EServiceLinkConnection::class,
+			'HIGHLIGHT' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\HighlightConnection::class,
 			'LINK' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\LinkConnection::class,
 			'OPENING_HOURS' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\OpeningHourConnection::class,
 		);
