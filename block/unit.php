@@ -92,6 +92,14 @@ function register(): void {
 	foreach ( blocks() as $block => $config ) {
 		\register_block_type( "helsinki-tpr/{$block}", $config );
 	}
+
+	\add_filter( 'helsinki_tpr_current_language', __NAMESPACE__ . '\\determine_current_language' );
+}
+
+function determine_current_language( string $language ): string {
+	return function_exists( 'pll_current_language' )
+	 	? \pll_current_language()
+		: $language;
 }
 
 \add_filter( 'block_categories_all', __NAMESPACE__ . '\\category', 10, 2 );
@@ -202,39 +210,55 @@ function public_assets(): void {
 /**
   * Rendering
   */
-function determine_unit( array $attributes ) {
-	return ! empty( $attributes['postID'] )
-		? Units::entities( \absint( $attributes['postID'] ) )
-		: null;
+function determine_unit( array $attributes ): ?Unit {
+	$post_id = ! empty( $attributes['postID'] )
+		? \absint( $attributes['postID'] )
+		: 0;
+
+	return \apply_filters( 'helsinki_tpr_unit_entity_by_id', null, $post_id );
+}
+
+function get_current_language(): string {
+	$locale = explode( '_', \get_locale() );
+
+	return \apply_filters(
+		'helsinki_tpr_current_language',
+		array_shift( $locale )
+	);
 }
 
 function render_unit( array $attributes ): string {
 	$unit = determine_unit( $attributes );
+	if ( ! $unit ) {
+		return '';
+	}
 
-	return $unit ? sprintf(
+	$language = get_current_language();
+
+	return sprintf(
 		'<div %s class="helsinki-tpr tpr-unit">
 			<div class="hds-container">%s%s</div>
 		</div>',
 		! empty( $attributes['anchor'] )
 			? sprintf( 'id="%s"', \esc_attr( $attributes['anchor'] ) )
 			: '',
-		render_unit_image( $unit ),
-		render_unit_content( $unit, $attributes )
-	) : '';
-}
-
-function render_unit_content( Unit $unit, array $attributes ): string {
-	return sprintf(
-		'<div class="tpr__container">%s%s</div>',
-		render_unit_title( $unit, $attributes ),
-		render_unit_data( $unit, $attributes )
+		render_unit_image( $unit, $language ),
+		render_unit_content( $unit, $attributes, $language )
 	);
 }
 
-function render_unit_title( Unit $unit, array $attributes ): string {
+function render_unit_content( Unit $unit, array $attributes, string $language ): string {
+	return sprintf(
+		'<div class="tpr__container">%s%s</div>',
+		render_unit_title( $unit, $attributes, $language ),
+		render_unit_data( $unit, $attributes, $language )
+	);
+}
+
+function render_unit_title( Unit $unit, array $attributes, string $language ): string {
 	$title = ! empty( $attributes['unitTitle'] )
 		? $attributes['unitTitle']
-		: $unit->name();
+		: $unit->name( $language );
 
 	return \apply_filters(
 		'helsinki_tpr_unit_block_title',
@@ -247,52 +271,55 @@ function render_unit_title( Unit $unit, array $attributes ): string {
 	);
 }
 
-function render_unit_data( Unit $unit, array $attributes ): string {
+function render_unit_data( Unit $unit, array $attributes, string $language ): string {
 	return \apply_filters(
 		'helsinki_tpr_unit_data',
-		implode( '', determine_unit_data_elements( $unit, $attributes ) ),
+		implode(
+			'',
+			determine_unit_data_elements( $unit, $attributes, $language )
+		),
 		$unit,
 		$attributes
 	);
 }
 
-function determine_unit_data_elements( Unit $unit, array $attributes ): array {
+function determine_unit_data_elements( Unit $unit, array $attributes, string $language ): array {
 	$elements = array();
 
 	if ( ! empty( $attributes['showStreetAddress'] ) ) {
-		$elements['street_address'] = render_unit_street_address( $unit );
+		$elements['street_address'] = render_unit_street_address( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showEmail'] ) ) {
-		$elements['email'] = render_unit_email( $unit );
+		$elements['email'] = render_unit_email( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showPhone'] ) ) {
-		$elements['phone'] = render_unit_phone_number( $unit );
+		$elements['phone'] = render_unit_phone_number( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showOpenHours'] ) ) {
-		$elements['open_hours'] = render_unit_open_hours( $unit );
+		$elements['open_hours'] = render_unit_open_hours( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showServiceLanguage'] ) ) {
-		$elements['service_languages'] = render_unit_service_language( $unit );
+		$elements['service_languages'] = render_unit_service_language( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showWebsite'] ) ) {
-		$elements['website'] = render_unit_website( $unit );
+		$elements['website'] = render_unit_website( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showPostalAddress'] ) ) {
-		$elements['postal_address'] = render_unit_postal_address( $unit );
+		$elements['postal_address'] = render_unit_postal_address( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showDirections'] ) ) {
-		$elements['directions'] = render_unit_directions( $unit );
+		$elements['directions'] = render_unit_directions( $unit, $language );
 	}
 
 	if ( ! empty( $attributes['showAdditionalInfo'] ) ) {
-		$elements['additional_info'] = render_unit_additional_info( $unit );
+		$elements['additional_info'] = render_unit_additional_info( $unit, $language );
 	}
 
 	return \apply_filters(
@@ -302,7 +329,8 @@ function determine_unit_data_elements( Unit $unit, array $attributes ): array {
 			legacy_unit_secondary_elements( $unit, $attributes )
 		),
 		$unit,
-		$attributes
+		$attributes,
+		$language
 	);
 }
 
@@ -338,20 +366,20 @@ function render_unit_icon( string $type,  string $icon ): string {
 	return \apply_filters( 'hds_wp_svg_icon_html', '', $icon, $type );
 }
 
-function render_unit_street_address( Unit $unit ): string {
+function render_unit_street_address( Unit $unit, string $language ): string {
 	$parts = array();
-	if (!empty($unit->street_address())) {
-		if (!empty($unit->address_zip()) || !empty($unit->address_city())) {
-			$parts[] = sprintf('%s,', $unit->street_address());
+	if ( ! empty( $unit->street_address( $language ) ) ) {
+		if ( ! empty( $unit->address_zip() ) || ! empty( $unit->address_city( $language ) ) ) {
+			$parts[] = sprintf('%s,', $unit->street_address( $language ) );
 		} else {
-			$parts[] = sprintf('%s', $unit->street_address());
+			$parts[] = sprintf('%s', $unit->street_address( $language ) );
 		}
 	}
-	if (!empty($unit->address_zip())) {
-		$parts[] = sprintf('%s', $unit->address_zip());
+	if ( ! empty($unit->address_zip() ) ) {
+		$parts[] = sprintf( '%s', $unit->address_zip() );
 	}
-	if (!empty($unit->address_city())) {
-		$parts[] = sprintf('%s', $unit->address_city());
+	if ( ! empty( $unit->address_city( $language ) ) ) {
+		$parts[] = sprintf( '%s', $unit->address_city( $language ) );
 	}
 
 	return sprintf(
@@ -368,13 +396,13 @@ function render_unit_street_address( Unit $unit ): string {
 			'location'
 		),
 		\esc_html( implode( ' ', $parts ) ),
-		\esc_url( $unit->get_service_map_link() ),
+		\esc_url( $unit->get_service_map_link( $language ) ),
 		\esc_html( __( 'View location on service map', 'helsinki-tpr' ) )
 	);
 }
 
-function render_unit_directions( Unit $unit ): string {
-	$link = $unit->get_hsl_route_link();
+function render_unit_directions( Unit $unit, string $language ): string {
+	$link = $unit->get_hsl_route_link( $language );
 
 	return $link ? sprintf(
 		'<div class="unit__directions">
@@ -391,13 +419,13 @@ function render_unit_directions( Unit $unit ): string {
 			'map'
 		),
 		\esc_url( $link ),
-		\esc_html( $unit->name() ),
+		\esc_html( $unit->name( $language ) ),
 		\esc_html( __( 'Show route in the HSL Journey Planner', 'helsinki-tpr' ) )
 	) : '';
 }
 
-function render_unit_postal_address( Unit $unit ): string {
-	$address = $unit->postal_address();
+function render_unit_postal_address( Unit $unit, string $language ): string {
+	$address = $unit->postal_address( $language );
 
 	return $address ? sprintf(
 		'<div class="unit__postal_address">
@@ -411,11 +439,11 @@ function render_unit_postal_address( Unit $unit ): string {
 			'blocks',
 			'location'
 		),
-		\esc_html( $unit->postal_address() ),
+		\esc_html( $address ),
 	) : '';
 }
 
-function render_unit_phone_number( Unit $unit ): string {
+function render_unit_phone_number( Unit $unit, string $language ): string {
 	$phone = $unit->phone();
 
 	return $phone ? sprintf(
@@ -435,7 +463,7 @@ function render_unit_phone_number( Unit $unit ): string {
 	) : '';
 }
 
-function render_unit_email( Unit $unit ): string {
+function render_unit_email( Unit $unit, string $language ): string {
 	$email = $unit->email();
 
 	return $email ? sprintf(
@@ -455,14 +483,10 @@ function render_unit_email( Unit $unit ): string {
 	) : '';
 }
 
-function render_unit_open_hours( Unit $unit ): string {
+function render_unit_open_hours( Unit $unit, string $language ): string {
 	if ( ! $unit->open_hours() ) {
 		return '';
 	}
-
-	$current_lang = function_exists( 'pll_default_language' )
-		? \pll_default_language()
-		: \get_locale();
 
 	return sprintf(
 		'<div class="unit__open_hours">
@@ -472,21 +496,12 @@ function render_unit_open_hours( Unit $unit ): string {
 			</div>
 		</div>',
 		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
-		implode( '', $unit->open_hours_html( $current_lang ) ),
+		implode( '', $unit->open_hours_html( $language ) ),
 	);
 }
 
-function render_unit_service_language( Unit $unit ): string {
-	$labels = array(
-		'fi' => __( 'Finnish', 'helsinki-tpr' ),
-		'en' => __( 'English', 'helsinki-tpr' ),
-		'sv' => __( 'Swedish', 'helsinki-tpr' ),
-	);
-
-	$languages = array_intersect_key(
-		$labels,
-		array_flip( $unit->available_languages() )
-	);
+function render_unit_service_language( Unit $unit, string $language ): string {
+	$languages = $unit->available_languages();
 
 	return $languages ? sprintf(
 		'<div class="unit__service_language">
@@ -504,8 +519,8 @@ function render_unit_service_language( Unit $unit ): string {
 	) : '';
 }
 
-function render_unit_website( Unit $unit ): string {
-	$weburl = $unit->website_url();
+function render_unit_website( Unit $unit, string $language ): string {
+	$weburl = $unit->website_url( $language );
 
 	return $weburl ? sprintf(
 		'<div class="unit__website">
@@ -522,13 +537,13 @@ function render_unit_website( Unit $unit ): string {
 			'arrow-right'
 		),
 		\esc_url( $weburl ),
-		\esc_html( $unit->name() ),
+		\esc_html( $unit->name( $language ) ),
 		\esc_html( __( 'Go to the website', 'helsinki-tpr' ) )
 	) : '';
 }
 
-function render_unit_image( Unit $unit ): string {
-	$image = $unit->html_img();
+function render_unit_image( Unit $unit, string $language ): string {
+	$image = $unit->html_img( $language );
 
 	return $image ? sprintf(
 		'<div class="unit__image">%s</div>',
@@ -536,8 +551,8 @@ function render_unit_image( Unit $unit ): string {
 	) : '';
 }
 
-function render_unit_additional_info( Unit $unit ): string {
-	$info = $unit->additional_info();
+function render_unit_additional_info( Unit $unit, string $language ): string {
+	$info = $unit->additional_info( $language );
 
 	return $info ? sprintf(
 		'<div class="unit__additional_info">
