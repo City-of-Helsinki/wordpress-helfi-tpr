@@ -7,8 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use CityOfHelsinki\WordPress\TPR as Plugin;
-use CityOfHelsinki\WordPress\TPR\CacheManager;
-use CityOfHelsinki\WordPress\TPR\Api\Units;
 
 \add_action( 'helsinki_tpr_init', __NAMESPACE__ . '\\setup_feature' );
 function setup_feature(): void {
@@ -27,7 +25,7 @@ function setup_feature(): void {
 }
 
 function register(): void {
-    register_post_type(
+    \register_post_type(
 		'helsinki_tpr_unit',
 		array(
 	        'labels'             => array(
@@ -69,14 +67,14 @@ function menu(): void {
     );
 }
 
-add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets' );
+\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets' );
 function admin_assets( $hook ) {
 	if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
 		return;
 	}
 }
 
-add_filter( 'use_block_editor_for_post_type', __NAMESPACE__ . '\\disable_editor', 10, 2 );
+\add_filter( 'use_block_editor_for_post_type', __NAMESPACE__ . '\\disable_editor', 10, 2 );
 function disable_editor( $current_status, $post_type ) {
 	if ( 'helsinki_tpr_unit' === $post_type ) {
 		return false;
@@ -84,9 +82,9 @@ function disable_editor( $current_status, $post_type ) {
     return $current_status;
 }
 
-add_action( 'add_meta_boxes_helsinki_tpr_unit', __NAMESPACE__ . '\\metabox' );
+\add_action( 'add_meta_boxes_helsinki_tpr_unit', __NAMESPACE__ . '\\metabox' );
 function metabox( $post ) {
-	add_meta_box(
+	\add_meta_box(
         'helsinki-tpr-unit',
         __( 'TPR Unit', 'helsinki-tpr' ),
         __NAMESPACE__ . '\\render_metabox',
@@ -111,9 +109,9 @@ function render_unit_menu_page_list(): void {
 }
 
 function render_metabox( $post, $metabox ): void {
-	$savedOptions = maybe_unserialize( $post->post_content );
+	$savedOptions = \maybe_unserialize( $post->post_content );
 
-	wp_nonce_field( 'helsinki-tpr-unit-nonce', 'helsinki-tpr-unit-nonce' );
+	\wp_nonce_field( 'helsinki-tpr-unit-nonce', 'helsinki-tpr-unit-nonce' );
 
 	Plugin\metabox_view( 'unit-data', array(
 		'unit' => \apply_filters(
@@ -180,39 +178,39 @@ function render_unit_data_row( string $name, array $values, $classes = '' ) {
 function link_to_tpr_edit_post($post_id) {
 	return sprintf(
 		'<a href="%s" class="button button-primary">%s</a>',
-		get_admin_url(null, 'post.php?post=' . $post_id. '&action=edit'),
+		\get_admin_url(null, 'post.php?post=' . $post_id. '&action=edit'),
 		__('Open post', 'helsinki-tpr')
 	);
 }
 
-add_filter( 'wp_insert_post_data', __NAMESPACE__ . '\\filter_post_data' , 99, 2 );
+\add_filter( 'wp_insert_post_data', __NAMESPACE__ . '\\filter_post_data' , 99, 2 );
 function filter_post_data( $data , $postarr ) {
 	if (
 		empty( $_POST['helsinki-unit-nonce'] ) ||
-		! wp_verify_nonce( $_POST['helsinki-unit-nonce'], 'helsinki-unit-nonce' )
+		! \wp_verify_nonce( $_POST['helsinki-unit-nonce'], 'helsinki-unit-nonce' )
 	) {
 		return $data;
 	}
 
 	if (
 		empty( $postarr['ID'] ) ||
-		! current_user_can( 'edit_post', $postarr['ID'] )
+		! \current_user_can( 'edit_post', $postarr['ID'] )
 	) {
 		return $data;
 	}
 
 	$config = $_POST['unit_config'] ?? array();
 	if ( $config ) {
-		$data['post_content'] = maybe_serialize( $config );
-		CacheManager::clear( 'unit-' . $postarr['ID'] );
+		$data['post_content'] = \maybe_serialize( $config );
+		\do_action( 'helsinki_tpr_clear_unit_cache', $postarr['ID'] );
 	}
 
     return $data;
 }
 
-add_action( 'delete_post', __NAMESPACE__ . '\\delete_tpr_unit_config' , 10, 2  );
+\add_action( 'delete_post', __NAMESPACE__ . '\\delete_tpr_unit_config' , 10, 2  );
 function delete_tpr_unit_config( $postid, $post ) {
 	if ( 'helsinki_tpr_unit' === $post->post_type ) {
-		CacheManager::clear( 'unit-' . $postid );
+		\do_action( 'helsinki_tpr_clear_unit_cache', $postid );
 	}
 }
