@@ -6,7 +6,7 @@
   * Version: 1.9.0
   * License: GPLv3
   * Requires at least: 5.7
-  * Requires PHP:      7.1
+  * Requires PHP:      8.0
   * Author: Broomu Digitals
   * Author URI: https://www.broomudigitals.fi
   * Text Domain: helsinki-tpr
@@ -44,8 +44,8 @@ function init() {
 
 	require_once 'block/unit.php';
 	require_once 'ajax/unit.php';
+  	require_once 'cpt/providers.php';
   	require_once 'cpt/unit-config.php';
-  	require_once 'cpt/unit-search-table.php';
 
 	/**
 	  * Plugin ready
