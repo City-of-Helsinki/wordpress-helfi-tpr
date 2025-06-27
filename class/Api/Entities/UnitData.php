@@ -48,7 +48,9 @@ class UnitData
 			'id' => '',
 		    'org_id' => '',
 		    'dept_id' => '',
+		    // 'arealcity_id' => '',
 		    // 'provider_type' => '',
+		    // 'displayed_service_owner_type' => '',
 		    // 'data_source_url' => '',
 		    'latitude' => '',
 		    'longitude' => '',
@@ -58,6 +60,8 @@ class UnitData
 		    // 'easting_etrs_tm35fin' => '',
 		    // 'manual_coordinates' => false,
 		    'address_zip' => '',
+		    // 'vtj_prt' => '',
+		    // 'vtj_prt_verified' => '',
 		    'email' => '',
 		    // 'accessibility_viewpoints' => '',
 		    // 'accessibility_phone' => '',
@@ -68,6 +72,8 @@ class UnitData
 		    'picture_url' => '',
 		    // 'ontologyword_ids' => array(),
 			// 'ontologytree_ids' => array(),
+			'provided_languages' => array(),
+			// 'regions' => array(),
 		);
 
 		foreach ( $simple_details as $key => $default ) {
@@ -87,16 +93,16 @@ class UnitData
 
 				return array();
 			},
-		    'service_descriptions' => function( stdClass $response ): array {
-				if ( ! empty( $response->service_descriptions ) ) {
-					return array_map(
-						fn( $data ) => (array) $data,
-						(array) $response->service_descriptions
-					);
-				}
-
-				return array();
-			},
+		    // 'service_descriptions' => function( stdClass $response ): array {
+			// 	if ( ! empty( $response->service_descriptions ) ) {
+			// 		return array_map(
+			// 			fn( $data ) => (array) $data,
+			// 			(array) $response->service_descriptions
+			// 		);
+			// 	}
+			//
+			// 	return array();
+			// },
 		    // 'accessibility_sentences' => array(),
 		);
 
@@ -115,6 +121,7 @@ class UnitData
 		    'call_charge_info' => '',
 		    'www' => '',
 		    'picture_caption' => '',
+		    // 'displayed_service_owner' => '',
 		);
 
 		foreach ( $translatables as $translatable => $default ) {
