@@ -118,19 +118,14 @@ class Unit
 		return $this->data->get_translated_data( 'address_postal_full', $language, '' );
     }
 
-    public function open_hours( string $deprecated = null ): array
+    public function open_hours(): array
 	{
         return $this->connections['OPENING_HOURS'] ?? array();
     }
 
 	public function open_hours_html( string $language ): array
 	{
-		return array_map(
-			function ( Connection $connection ) use ( $language ) {
-				return $connection->to_html( $language );
-			},
-			$this->open_hours()
-		);
+		return $this->connections_html( $this->open_hours(), $language );
 	}
 
     public function available_languages(): array
@@ -141,23 +136,22 @@ class Unit
 		);
     }
 
-    public function additional_info( string $language = 'en' ): ?array
+    public function additional_info(): array
 	{
-		return array_map(
-			function ( Connection $connection ) use ( $language ) {
-				return $connection->name( $language );
-			},
-			$this->connections['HIGHLIGHT'] ?? array()
-		);
+		return $this->connections['HIGHLIGHT'] ?? array();
     }
 
-	protected static function get_property( $item, $property )
+    public function additional_info_html( string $language = 'en' ): ?array
 	{
-		if ( is_object( $item ) ) {
-			return property_exists( $item, $property ) ? (array) $item->{$property} : [];
-		} else {
-			return $item[$property] ?? [];
-		}
+		return $this->connections_html( $this->additional_info(), $language );
+    }
+
+	private function connections_html( array $connections, string $language ): array
+	{
+		return array_filter( array_map(
+			fn( Connection $connection ) => $connection->to_html( $language ),
+			$connections
+		) );
 	}
 
     public function get_service_map_link( string $language = 'en' ): string
