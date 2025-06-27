@@ -98,7 +98,7 @@ use CityOfHelsinki\WordPress\TPR\Cpt as Plugin;
 
 		        Plugin\render_unit_data_row(
 					__('Additional information', 'helsinki-tpr'),
-					$data['unit']->additional_info( $lang_code )
+					$data['unit']->additional_info_html( $lang_code )
 				);
 
 				echo '</div>';
