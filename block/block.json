@@ -16,8 +16,8 @@
     ],
     "attributes": {
         "postID": {
-            "type": "number",
-            "default": 0
+            "type": "string",
+            "default": ""
         },
         "anchor": {
             "type": "string",
