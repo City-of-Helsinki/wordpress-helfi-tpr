@@ -180,7 +180,7 @@
       value: props.attributes.postID,
       onChange: function onChange(id) {
         return props.setAttributes({
-          postID: parseInt(id, 10)
+          postID: id
         });
       },
       options: options
