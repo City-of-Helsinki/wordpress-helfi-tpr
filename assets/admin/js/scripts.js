@@ -302,69 +302,7 @@
 
 
   registerBlockType('helsinki-tpr/unit', {
-    apiVersion: 2,
     title: __('Helsinki - Unit (TPR)', 'helsinki-tpr'),
-    category: 'helsinki-tpr',
-    icon: 'building',
-    keywords: [__('unit', 'helsinki-tpr'), __('tpr', 'helsinki-tpr'), __('Helsinki - TPR Unit', 'helsinki-tpr')],
-    supports: {
-      html: false,
-      anchor: true
-    },
-    attributes: {
-      postID: {
-        type: 'string',
-        default: 0
-      },
-      unitTitle: {
-        type: 'string',
-        default: ''
-      },
-      showStreetAddress: {
-        type: 'boolean',
-        default: true
-      },
-      showPostalAddress: {
-        type: 'boolean',
-        default: true
-      },
-      showPhone: {
-        type: 'boolean',
-        default: true
-      },
-      showEmail: {
-        type: 'boolean',
-        default: true
-      },
-      showDirections: {
-        type: 'boolean',
-        default: true
-      },
-      showServiceLanguage: {
-        type: 'boolean',
-        default: true
-      },
-      showOpenHours: {
-        type: 'boolean',
-        default: true
-      },
-      showWebsite: {
-        type: 'boolean',
-        default: true
-      },
-      showAdditionalInfo: {
-        type: 'boolean',
-        default: true
-      },
-      showPhoto: {
-        type: 'boolean',
-        default: true
-      },
-      anchor: {
-        type: 'string',
-        default: ''
-      }
-    },
     edit: edit()
   });
 })(window.wp);
