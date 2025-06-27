@@ -14,19 +14,7 @@ use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Connection;
 function register(): void {
 	\register_block_type(
 		\plugin_dir_path( __FILE__ ) . 'block.json',
-		array(
-			'dependencies' => array(
-				'wp-blocks',
-				'wp-i18n',
-				'wp-element',
-				'wp-components',
-				'wp-editor',
-				'wp-compose',
-				'wp-data',
-				'wp-server-side-render',
-			),
-			'render_callback' => __NAMESPACE__ . '\\render_unit',
-		)
+		array( 'render_callback' => __NAMESPACE__ . '\\render_unit' )
 	);
 
 	\add_filter( 'helsinki_tpr_current_language', __NAMESPACE__ . '\\determine_current_language' );
