@@ -41,7 +41,7 @@ abstract class AbstractConnectionType implements ConnectionTypeInterface
 			'<a href="%s">%s</a>',
 			\esc_url( $url ),
 			\esc_html( $anchor )
-		) : '';
+		) : $this->text_html( $connection, $lang );
 	}
 
 	protected function text_html( Connection $connection, string $lang ): string
