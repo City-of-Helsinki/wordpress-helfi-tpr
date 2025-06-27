@@ -14,7 +14,9 @@ class Units extends Client {
 			return null;
 		}
 
-		$response = self::get( 'unit/' . $unit_id );
+		$response = self::get( 'unit/' . $unit_id, array(
+			'newfeatures' => 'yes',
+		) );
 
 		return $response
 			? UnitData::from_response( $response )
@@ -38,7 +40,11 @@ class Units extends Client {
 	}
 
 	public static function search_units(string $query) {
-		$response = self::get( 'unit', array_filter( array( 'search' => $query ) ) );
+		$response = self::get( 'unit', array_filter( array(
+			'search' => $query,
+			'newfeatures' => 'yes',
+		) ) );
+
 		return $response;
 	}
 
