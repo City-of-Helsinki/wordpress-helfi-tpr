@@ -12,4 +12,9 @@ class HighlightConnection extends AbstractConnectionType
 	{
 		return 'HIGHLIGHT';
 	}
+
+	public function is_link(): bool
+	{
+		return true;
+	}
 }
