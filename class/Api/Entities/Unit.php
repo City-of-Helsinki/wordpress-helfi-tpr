@@ -50,14 +50,10 @@ class Unit
 	{
 		$this->languages = array();
 
-		foreach ( $this->data->get_data( 'service_descriptions', array() ) as $data ) {
-			if ( isset( $data['available_languages'] ) ) {
-				array_walk(
-					$data['available_languages'],
-					array( $this, 'add_language' )
-				);
-			}
-		}
+		array_reduce(
+			$this->data->get_data( 'provided_languages', array() ),
+			fn( $carry, $code ) => $this->add_language( $code )
+		);
 	}
 
 	private function add_language( string $code ): void
