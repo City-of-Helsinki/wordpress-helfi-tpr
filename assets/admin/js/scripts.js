@@ -179,7 +179,7 @@
       label: __('Unit selection', 'helsinki-tpr'),
       value: props.attributes.postID,
       onChange: function onChange(id) {
-        props.setAttributes({
+        return props.setAttributes({
           postID: id
         });
       },
@@ -214,25 +214,33 @@
       checked: props.attributes.showStreetAddress,
       attribute: 'showStreetAddress'
     }, props), infoToggleControl({
-      label: __('Show postal address', 'helsinki-tpr'),
-      checked: props.attributes.showPostalAddress,
-      attribute: 'showPostalAddress'
+      label: __('Show email', 'helsinki-tpr'),
+      checked: props.attributes.showEmail,
+      attribute: 'showEmail'
     }, props), infoToggleControl({
       label: __('Show phone', 'helsinki-tpr'),
       checked: props.attributes.showPhone,
       attribute: 'showPhone'
     }, props), infoToggleControl({
-      label: __('Show email', 'helsinki-tpr'),
-      checked: props.attributes.showEmail,
-      attribute: 'showEmail'
-    }, props), infoToggleControl({
       label: __('Show open hours', 'helsinki-tpr'),
       checked: props.attributes.showOpenHours,
       attribute: 'showOpenHours'
     }, props), infoToggleControl({
+      label: __('Show service language', 'helsinki-tpr'),
+      checked: props.attributes.showServiceLanguage,
+      attribute: 'showServiceLanguage'
+    }, props), infoToggleControl({
       label: __('Show website', 'helsinki-tpr'),
       checked: props.attributes.showWebsite,
       attribute: 'showWebsite'
+    }, props), infoToggleControl({
+      label: __('Show postal address', 'helsinki-tpr'),
+      checked: props.attributes.showPostalAddress,
+      attribute: 'showPostalAddress'
+    }, props), infoToggleControl({
+      label: __('Show directions', 'helsinki-tpr'),
+      checked: props.attributes.showDirections,
+      attribute: 'showDirections'
     }, props), infoToggleControl({
       label: __('Show additional information', 'helsinki-tpr'),
       checked: props.attributes.showAdditionalInfo,
@@ -294,61 +302,7 @@
 
 
   registerBlockType('helsinki-tpr/unit', {
-    apiVersion: 2,
     title: __('Helsinki - Unit (TPR)', 'helsinki-tpr'),
-    category: 'helsinki-tpr',
-    icon: 'building',
-    keywords: [__('unit', 'helsinki-tpr'), __('tpr', 'helsinki-tpr'), __('Helsinki - TPR Unit', 'helsinki-tpr')],
-    supports: {
-      html: false,
-      anchor: true
-    },
-    attributes: {
-      postID: {
-        type: 'string',
-        default: 0
-      },
-      unitTitle: {
-        type: 'string',
-        default: ''
-      },
-      showStreetAddress: {
-        type: 'boolean',
-        default: true
-      },
-      showPostalAddress: {
-        type: 'boolean',
-        default: true
-      },
-      showPhone: {
-        type: 'boolean',
-        default: true
-      },
-      showEmail: {
-        type: 'boolean',
-        default: true
-      },
-      showOpenHours: {
-        type: 'boolean',
-        default: true
-      },
-      showWebsite: {
-        type: 'boolean',
-        default: true
-      },
-      showAdditionalInfo: {
-        type: 'boolean',
-        default: true
-      },
-      showPhoto: {
-        type: 'boolean',
-        default: true
-      },
-      anchor: {
-        type: 'string',
-        default: ''
-      }
-    },
     edit: edit()
   });
 })(window.wp);

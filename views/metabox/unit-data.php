@@ -7,50 +7,103 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use CityOfHelsinki\WordPress\TPR\Cpt as Plugin;
+
 ?>
     <nav class="nav-tab-wrapper">
-      <a href="#" class="nav-tab nav-tab-active" data-container="finnish-tpr-data"><?php _e('Finnish', 'helsinki-tpr') ?></a>
-      <a href="#" class="nav-tab" data-container="english-tpr-data"><?php _e('English', 'helsinki-tpr') ?></a>
-      <a href="#" class="nav-tab" data-container="swedish-tpr-data"><?php _e('Swedish', 'helsinki-tpr') ?></a>
+		<?php
+			foreach( $data['languages'] as $lang_code => $language ) {
+				$classes = 'nav-tab';
+				if ( $lang_code === $data['active_language'] ) {
+					$classes .= ' nav-tab-active';
+				}
+
+				printf(
+					'<a href="#" class="%s" data-container="%s-tpr-data">
+						%s
+					</a>',
+					$classes,
+					\esc_attr( $language['name'] ),
+					\esc_html( $language['label'] )
+				);
+			}
+		?>
     </nav>
 
-    <div class="post-tpr-data finnish-tpr-data active">
-      <?php
-        Plugin\render_unit_data_row(__('Name', 'helsinki-tpr'), array($data->name('fi')));
-        Plugin\render_unit_data_row(__('Image', 'helsinki-tpr'), array($data->html_img('fi')), 'tpr-img');
-        Plugin\render_unit_data_row(__('Phone', 'helsinki-tpr'), array($data->phone()));
-        Plugin\render_unit_data_row(__('Email', 'helsinki-tpr'), array($data->email()));
-        Plugin\render_unit_data_row(__('Website URL', 'helsinki-tpr'), array($data->website_url('fi')));
-        Plugin\render_unit_data_row(__('Street Address', 'helsinki-tpr'), array($data->street_address('fi'), $data->address_zip(), $data->address_city('fi')));
-        Plugin\render_unit_data_row(__('Postal Address', 'helsinki-tpr'), array($data->postal_address('fi')));
-        Plugin\render_unit_data_row(__('Open hours', 'helsinki-tpr'), $data->open_hours_html( 'fi' ) );
-        Plugin\render_unit_data_row(__('Additional information', 'helsinki-tpr'), $data->additional_info('fi'));
-      ?>
-    </div>
-    <div class="post-tpr-data english-tpr-data">
-      <?php
-        Plugin\render_unit_data_row(__('Name', 'helsinki-tpr'), array($data->name('en')));
-        Plugin\render_unit_data_row(__('Image', 'helsinki-tpr'), array($data->html_img('en')), 'tpr-img');
-        Plugin\render_unit_data_row(__('Phone', 'helsinki-tpr'), array($data->phone()));
-        Plugin\render_unit_data_row(__('Email', 'helsinki-tpr'), array($data->email()));
-        Plugin\render_unit_data_row(__('Website URL', 'helsinki-tpr'), array($data->website_url('en')));
-        Plugin\render_unit_data_row(__('Street Address', 'helsinki-tpr'), array($data->street_address('en'), $data->address_zip(), $data->address_city('en')));
-        Plugin\render_unit_data_row(__('Postal Address', 'helsinki-tpr'), array($data->postal_address('en')));
-        Plugin\render_unit_data_row(__('Open hours', 'helsinki-tpr'), $data->open_hours_html( 'en' ) );
-        Plugin\render_unit_data_row(__('Additional information', 'helsinki-tpr'), $data->additional_info('en'));
-      ?>
-    </div>
-    <div class="post-tpr-data swedish-tpr-data">
-      <?php
-        Plugin\render_unit_data_row(__('Name', 'helsinki-tpr'), array($data->name('sv')));
-        Plugin\render_unit_data_row(__('Image', 'helsinki-tpr'), array($data->html_img('sv')), 'tpr-img');
-        Plugin\render_unit_data_row(__('Phone', 'helsinki-tpr'), array($data->phone()));
-        Plugin\render_unit_data_row(__('Email', 'helsinki-tpr'), array($data->email()));
-        Plugin\render_unit_data_row(__('Website URL', 'helsinki-tpr'), array($data->website_url('sv')));
-        Plugin\render_unit_data_row(__('Street Address', 'helsinki-tpr'), array($data->street_address('sv'), $data->address_zip(), $data->address_city('sv')));
-        Plugin\render_unit_data_row(__('Postal Address', 'helsinki-tpr'), array($data->postal_address('sv')));
-        Plugin\render_unit_data_row(__('Open hours', 'helsinki-tpr'), $data->open_hours_html( 'sv' ) );
-        Plugin\render_unit_data_row(__('Additional information', 'helsinki-tpr'), $data->additional_info('sv'));
-      ?>
-    </div>
+	<?php
+		if ( $data['unit'] ) {
+
+			foreach( $data['languages'] as $lang_code => $language ) {
+				$classes = sprintf( 'post-tpr-data %s-tpr-data', $language['name'] );
+				if ( $lang_code === $data['active_language'] ) {
+					$classes .= ' active';
+				}
+
+				printf( '<div class="%s">', \esc_attr( $classes ) );
+
+		        Plugin\render_unit_data_row(
+					__('Image', 'helsinki-tpr'),
+					array( $data['unit']->html_img( $lang_code ) ),
+					'tpr-img'
+				);
+
+				Plugin\render_unit_data_row(
+					__('Name', 'helsinki-tpr'),
+					array( $data['unit']->name( $lang_code ) )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Street Address', 'helsinki-tpr'),
+					array(
+						$data['unit']->street_address( $lang_code ),
+						$data['unit']->address_zip(),
+						$data['unit']->address_city( $lang_code ),
+						$data['unit']->get_service_map_link()
+					)
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Email', 'helsinki-tpr'),
+					array( $data['unit']->email() )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Phone', 'helsinki-tpr'),
+					array( $data['unit']->phone() )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Open hours', 'helsinki-tpr'),
+					$data['unit']->open_hours_html( $lang_code )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Service language', 'helsinki-tpr'),
+					$data['unit']->available_languages()
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Website', 'helsinki-tpr'),
+					array( $data['unit']->website_url( $lang_code ) )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Postal Address', 'helsinki-tpr'),
+					array( $data['unit']->postal_address( $lang_code ) )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('How to get here', 'helsinki-tpr'),
+					array( $data['unit']->get_hsl_route_link() )
+				);
+
+		        Plugin\render_unit_data_row(
+					__('Additional information', 'helsinki-tpr'),
+					$data['unit']->additional_info_html( $lang_code )
+				);
+
+				echo '</div>';
+			}
+
+		}
+	?>
   <?php

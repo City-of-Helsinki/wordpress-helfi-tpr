@@ -1,0 +1,71 @@
+{
+    "apiVersion": 2,
+    "title": "Helsinki - Unit (TPR)",
+    "name": "helsinki-tpr/unit",
+    "icon": "building",
+    "textdomain": "helsinki-tpr",
+    "category": "helsinki-tpr",
+    "supports": {
+      "anchor": true,
+      "html": false
+    },
+    "keywords": [
+      "unit",
+      "tpr",
+      "Helsinki - TPR Unit"
+    ],
+    "attributes": {
+        "postID": {
+            "type": "string",
+            "default": ""
+        },
+        "anchor": {
+            "type": "string",
+            "default": ""
+        },
+        "unitTitle": {
+            "type": "string",
+            "default": ""
+        },
+        "showStreetAddress": {
+            "type": "boolean",
+            "default": true
+        },
+        "showPostalAddress": {
+            "type": "boolean",
+            "default": true
+        },
+        "showPhone": {
+            "type": "boolean",
+            "default": true
+        },
+        "showEmail": {
+            "type": "boolean",
+            "default": true
+        },
+        "showOpenHours": {
+            "type": "boolean",
+            "default": true
+        },
+        "showWebsite": {
+            "type": "boolean",
+            "default": true
+        },
+        "showDirections": {
+            "type": "boolean",
+            "default": true
+        },
+        "showServiceLanguage": {
+            "type": "boolean",
+            "default": true
+        },
+        "showAdditionalInfo": {
+            "type": "boolean",
+            "default": true
+        },
+        "showPhoto": {
+            "type": "boolean",
+            "default": true
+        }
+    }
+}
