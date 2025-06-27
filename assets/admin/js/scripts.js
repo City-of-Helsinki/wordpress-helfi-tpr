@@ -179,8 +179,8 @@
       label: __('Unit selection', 'helsinki-tpr'),
       value: props.attributes.postID,
       onChange: function onChange(id) {
-        props.setAttributes({
-          postID: id
+        return props.setAttributes({
+          postID: parseInt(id, 10)
         });
       },
       options: options

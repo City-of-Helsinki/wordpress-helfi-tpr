@@ -45,11 +45,9 @@
     return createElement(SelectControl, {
       label: __( 'Unit selection', 'helsinki-tpr' ),
       value: props.attributes.postID,
-      onChange: function(id) {
-        props.setAttributes({
-          postID: id,
-        });
-      },
+      onChange: (id) => props.setAttributes({
+        postID: parseInt(id, 10)
+      }),
       options: options,
     });
   });
