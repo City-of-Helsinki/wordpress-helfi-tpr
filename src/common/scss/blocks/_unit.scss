@@ -1,6 +1,8 @@
 @use "sass:math";
 
 .helsinki-tpr.tpr-unit {
+  --icon-size: 24px;
+
   background-color: rgb(247, 247, 248);
   padding: spacing('s');
 
@@ -13,6 +15,13 @@
 
   @include breakpoint('l') {
     padding: spacing('l');
+  }
+
+  a {
+    .icon {
+      width: var(--icon-size);
+      height: var(--icon-size);
+    }
   }
 
   .hds-container {
@@ -66,8 +75,8 @@
       margin-bottom: spacing('2-xs');
 
       .icon {
-        width: 24px;
-        height: 24px;
+        width: var(--icon-size);
+        height: var(--icon-size);
         margin-right: 8px;
       }
 
