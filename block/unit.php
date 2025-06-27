@@ -8,13 +8,13 @@ use CityOfHelsinki\WordPress\TPR\Api\Entities\Unit;
 use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Connection;
 
 /**
-  * Config
+  * Register
   */
-function blocks(): array {
-	return array(
-		'unit' => array(
-			'title' => __( 'Helsinki - Unit (TPR)', 'helsinki-tpr' ),
-			'category' => 'helsinki-tpr',
+\add_action( 'init', __NAMESPACE__ . '\\register' );
+function register(): void {
+	\register_block_type(
+		\plugin_dir_path( __FILE__ ) . 'block.json',
+		array(
 			'dependencies' => array(
 				'wp-blocks',
 				'wp-i18n',
@@ -26,80 +26,24 @@ function blocks(): array {
 				'wp-server-side-render',
 			),
 			'render_callback' => __NAMESPACE__ . '\\render_unit',
-			'attributes' => array(
-				'postID' => array(
-					'type' => 'string',
-					'default' => 0,
-				),
-				'unitTitle' => array(
-					'type' => 'string',
-					'default' => '',
-				),
-				'showStreetAddress' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showPostalAddress' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showPhone' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showEmail' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showOpenHours' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showWebsite' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showDirections' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showServiceLanguage' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showAdditionalInfo' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showPhoto' => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'anchor' => array(
-					'type'    => 'string',
-					'default' => '',
-				),
-			),
 		)
 	);
-}
-
-/**
-  * Register
-  */
-\add_action( 'init', __NAMESPACE__ . '\\register' );
-function register(): void {
-	foreach ( blocks() as $block => $config ) {
-		\register_block_type( "helsinki-tpr/{$block}", $config );
-	}
 
 	\add_filter( 'helsinki_tpr_current_language', __NAMESPACE__ . '\\determine_current_language' );
 }
 
 function determine_current_language( string $language ): string {
-	return function_exists( 'pll_current_language' )
-	 	? \pll_current_language()
-		: $language;
+	return array_reduce(
+		array( 'pll_current_language', 'pll_default_language' ),
+		function( string $current, $handler ) {
+			if ( function_exists( $handler ) ) {
+				$current = call_user_func( $handler ) ?: $current;
+			}
+
+			return $current;
+		},
+		$language
+	);
 }
 
 \add_filter( 'block_categories_all', __NAMESPACE__ . '\\category', 10, 2 );
@@ -119,21 +63,6 @@ function category( array $categories, $context ): array {
 
 	return $categories;
 }
-
-/**
-  * Assets
-  */
-/*function block_dependencies() {
-	$dependencies = array();
-	foreach ( blocks() as $block => $config ) {
-		$dependencies = array_merge(
-			$dependencies,
-			$config['dependencies']
-		);
-	}
-	return array_unique( $dependencies, SORT_STRING );
-}*/
-
 
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets', 10 );
 function admin_assets( string $hook ): void {
@@ -240,7 +169,7 @@ function render_unit( array $attributes ): string {
 		! empty( $attributes['anchor'] )
 			? sprintf( 'id="%s"', \esc_attr( $attributes['anchor'] ) )
 			: '',
-		render_unit_image( $unit, $language ),
+		render_unit_image( $unit, $attributes, $language ),
 		render_unit_content( $unit, $attributes, $language )
 	);
 }
@@ -548,7 +477,11 @@ function render_unit_website( Unit $unit, string $language ): string {
 	) : '';
 }
 
-function render_unit_image( Unit $unit, string $language ): string {
+function render_unit_image( Unit $unit, array $attributes, string $language ): string {
+	if ( empty( $attributes['showPhoto'] ) ) {
+		return '';
+	}
+
 	$image = $unit->html_img( $language );
 
 	return $image ? sprintf(
