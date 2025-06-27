@@ -2,7 +2,6 @@
 
 namespace CityOfHelsinki\WordPress\TPR\Api;
 
-use CityOfHelsinki\WordPress\TPR\CacheManager;
 use CityOfHelsinki\WordPress\TPR\Api\Entities\UnitData;
 
 class Units extends Client {
