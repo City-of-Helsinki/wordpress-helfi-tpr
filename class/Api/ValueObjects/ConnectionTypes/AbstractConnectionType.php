@@ -38,7 +38,7 @@ abstract class AbstractConnectionType implements ConnectionTypeInterface
 		$anchor = $connection->name( $lang );
 
 		return ( $url && $anchor ) ? sprintf(
-			'<a href="%s">%s</a>',
+			'<p><a href="%s">%s</a></p>',
 			\esc_url( $url ),
 			\esc_html( $anchor )
 		) : $this->text_html( $connection, $lang );
@@ -48,9 +48,6 @@ abstract class AbstractConnectionType implements ConnectionTypeInterface
 	{
 		$content = $connection->name( $lang );
 
-		return $content ? sprintf(
-			'<p>%s</p>',
-			\wp_kses_post( \wpautop( $content ) )
-		) : '';
+		return $content ? \wp_kses_post( \wpautop( $content ) ) : '';
 	}
 }
