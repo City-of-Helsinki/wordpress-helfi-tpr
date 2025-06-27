@@ -219,11 +219,9 @@ function determine_unit( array $attributes ): ?Unit {
 }
 
 function get_current_language(): string {
-	$locale = explode( '_', \get_locale() );
-
 	return \apply_filters(
 		'helsinki_tpr_current_language',
-		array_shift( $locale )
+		substr( \get_locale(), 0, 2 )
 	);
 }
 
@@ -382,12 +380,25 @@ function render_unit_street_address( Unit $unit, string $language ): string {
 		$parts[] = sprintf( '%s', $unit->address_city( $language ) );
 	}
 
+	if ( ! $parts ) {
+		return '';
+	}
+
+	$route_link = $unit->get_service_map_link( $language );
+	if ( $route_link ) {
+		$route_link = link_with_screen_reader_text(
+			$route_link,
+			__( 'View location on service map', 'helsinki-tpr' ),
+			$unit->name( $language )
+		);
+	}
+
 	return sprintf(
 		'<div class="unit__street_address">
 			%s
 			<div class="unit__section_data">
 				<div class="address">%s</div>
-				<a href="%s">%s</a>
+				%s
 			</div>
 		</div>',
 		render_unit_section_title(
@@ -396,8 +407,7 @@ function render_unit_street_address( Unit $unit, string $language ): string {
 			'location'
 		),
 		\esc_html( implode( ' ', $parts ) ),
-		\esc_url( $unit->get_service_map_link( $language ) ),
-		\esc_html( __( 'View location on service map', 'helsinki-tpr' ) )
+		$route_link
 	);
 }
 
@@ -408,9 +418,7 @@ function render_unit_directions( Unit $unit, string $language ): string {
 		'<div class="unit__directions">
 			%s
 			<div class="unit__section_data">
-				<a href="%s">
-					<span class="screen-reader-text">%s: </span>%s
-				</a>
+				%s
 			</div>
 		</div>',
 		render_unit_section_title(
@@ -418,9 +426,11 @@ function render_unit_directions( Unit $unit, string $language ): string {
 			'blocks',
 			'map'
 		),
-		\esc_url( $link ),
-		\esc_html( $unit->name( $language ) ),
-		\esc_html( __( 'Show route in the HSL Journey Planner', 'helsinki-tpr' ) )
+		link_with_screen_reader_text(
+			$link,
+			__( 'Show route in the HSL Journey Planner', 'helsinki-tpr' ),
+			$unit->name( $language )
+		)
 	) : '';
 }
 
@@ -484,11 +494,7 @@ function render_unit_email( Unit $unit, string $language ): string {
 }
 
 function render_unit_open_hours( Unit $unit, string $language ): string {
-	if ( ! $unit->open_hours() ) {
-		return '';
-	}
-
-	return sprintf(
+	return $unit->open_hours() ? sprintf(
 		'<div class="unit__open_hours">
 			%s
 			<div class="unit__section_data">
@@ -497,7 +503,7 @@ function render_unit_open_hours( Unit $unit, string $language ): string {
 		</div>',
 		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
 		implode( '', $unit->open_hours_html( $language ) ),
-	);
+	) : '';
 }
 
 function render_unit_service_language( Unit $unit, string $language ): string {
@@ -526,9 +532,7 @@ function render_unit_website( Unit $unit, string $language ): string {
 		'<div class="unit__website">
 			%s
 			<div class="unit__section_data">
-				<a href="%s">
-					<span class="screen-reader-text">%s: </span>%s
-				</a>
+				%s
 			</div>
 		</div>',
 		render_unit_section_title(
@@ -536,9 +540,11 @@ function render_unit_website( Unit $unit, string $language ): string {
 			'blocks',
 			'arrow-right'
 		),
-		\esc_url( $weburl ),
-		\esc_html( $unit->name( $language ) ),
-		\esc_html( __( 'Go to the website', 'helsinki-tpr' ) )
+		link_with_screen_reader_text(
+			$weburl,
+			__( 'Go to the website', 'helsinki-tpr' ),
+			$unit->name( $language )
+		)
 	) : '';
 }
 
@@ -568,4 +574,15 @@ function render_unit_additional_info( Unit $unit, string $language ): string {
 		),
 		implode( '</p><p>', \wp_kses_post( $info ) ),
 	) : '';
+}
+
+function link_with_screen_reader_text( string $url, string $anchor, string $hidden_text ): string {
+	return sprintf(
+		'<a href="%s">
+			<span class="screen-reader-text">%s: </span>%s
+		</a>',
+		\esc_url( $url ),
+		\esc_html( $hidden_text ),
+		\esc_html( $anchor )
+	);
 }
