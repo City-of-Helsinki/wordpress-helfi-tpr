@@ -419,7 +419,7 @@ function render_unit_open_hours( Unit $unit, string $language ): string {
 			</div>
 		</div>',
 		render_unit_section_title( __('Open hours', 'helsinki-tpr'), 'blocks', 'clock' ),
-		implode( '', $unit->open_hours_html( $language ) ),
+		implode( '', $unit->open_hours_html( $language ) )
 	) : '';
 }
 
@@ -479,13 +479,11 @@ function render_unit_image( Unit $unit, array $attributes, string $language ): s
 }
 
 function render_unit_additional_info( Unit $unit, string $language ): string {
-	$info = $unit->additional_info( $language );
-
-	return $info ? sprintf(
+	return $unit->additional_info() ? sprintf(
 		'<div class="unit__additional_info">
 			%s
 			<div class="unit__section_data">
-				<p>%s</p>
+				%s
 			</div>
 		</div>',
 		render_unit_section_title(
@@ -493,7 +491,7 @@ function render_unit_additional_info( Unit $unit, string $language ): string {
 			'blocks',
 			'info-circle'
 		),
-		implode( '</p><p>', \wp_kses_post( $info ) ),
+		implode( '', $unit->additional_info_html( $language ) )
 	) : '';
 }
 
