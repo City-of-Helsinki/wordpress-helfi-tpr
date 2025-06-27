@@ -79,6 +79,7 @@ class Connection
 			'ESERVICE_LINK' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\EServiceLinkConnection::class,
 			'HIGHLIGHT' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\HighlightConnection::class,
 			'LINK' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\LinkConnection::class,
+			'SOCIAL_MEDIA_LINK' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\SocialMediaLinkConnection::class,
 			'OPENING_HOURS' => \CityOfHelsinki\WordPress\TPR\Api\ValueObjects\ConnectionTypes\OpeningHourConnection::class,
 		);
 
