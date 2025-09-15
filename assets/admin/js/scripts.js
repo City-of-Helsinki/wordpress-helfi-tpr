@@ -4,39 +4,29 @@
   'use strict';
 
   var importButtons = config.importButtons,
-      ajax = config.ajax;
-
+    ajax = config.ajax;
   if (importButtons.length > 0) {
     for (var i = 0; i < importButtons.length; i++) {
       importButtons[i].addEventListener('click', _clickImport);
     }
   }
-
   function _clickImport(event) {
     event.preventDefault();
-
     _importUnit(event.currentTarget);
   }
-
   function _importUnit(button) {
     button.disabled = true;
     var spinner = button.nextElementSibling;
     spinner.style.visibility = 'visible';
-
     var _formData = new FormData();
-
     _formData.append('action', 'helsinki_import_tpr_unit');
-
     _formData.append('id', button.getAttribute('data-tpr-id'));
-
     _formData.append('title', button.getAttribute('data-tpr-title'));
-
     _ajaxRequest(ajax.ajaxUrl, _formData).then(function (response) {
       if (response) {
         response = JSON.parse(response);
         console.log(response.data.link_html);
       }
-
       spinner.style.visibility = 'hidden';
       button.parentElement.innerHTML = response.data.link_html;
     }).catch(function (error) {
@@ -44,12 +34,10 @@
       button.disabled = false;
     });
   }
-
   function _ajaxRequest(endpoint, formData) {
     return new Promise(function (resolve, reject) {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', endpoint);
-
       xhr.onload = function () {
         if (this.status >= 200 && this.status < 300) {
           resolve(xhr.response);
@@ -57,14 +45,12 @@
           reject(xhr.response);
         }
       };
-
       xhr.onerror = function () {
         reject({
           status: this.status,
           message: xhr.statusText
         });
       };
-
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       xhr.send(formData);
     });
@@ -73,30 +59,25 @@
   importButtons: document.querySelectorAll('.helsinki-tpr-import-button'),
   ajax: helsinkiTPR
 });
-
 (function (config) {
   'use strict';
 
   var container = config.container;
   var tabs, dataContainers;
-
   if (container.length > 0) {
     for (var i = 0; i < container.length; i++) {
       _initContainerElement(container[i]);
     }
   }
-
   function _initContainerElement(element) {
     tabs = element.querySelectorAll('.nav-tab');
     var currentTab = element.querySelector('.nav-tab-active');
     dataContainers = element.querySelectorAll('.post-tpr-data');
     var currentDataContainer = element.querySelector('.post-tpr-data.active');
-
     for (var i = 0; i < tabs.length; i++) {
       tabs[i].addEventListener('click', function (event) {
         var tab = event.currentTarget;
         var dC = element.querySelector('.' + tab.getAttribute('data-container'));
-
         if (tab != currentTab) {
           currentTab.classList.remove('nav-tab-active');
           currentDataContainer.classList.remove('active');
@@ -111,14 +92,13 @@
 })({
   container: document.querySelectorAll('#helsinki-tpr-unit')
 });
-
 (function (wp) {
   var __ = wp.i18n.__;
   var _wp$blocks = wp.blocks,
-      unregisterBlockType = _wp$blocks.unregisterBlockType,
-      unregisterBlockVariation = _wp$blocks.unregisterBlockVariation,
-      getBlockType = _wp$blocks.getBlockType,
-      getBlockVariations = _wp$blocks.getBlockVariations;
+    unregisterBlockType = _wp$blocks.unregisterBlockType,
+    unregisterBlockVariation = _wp$blocks.unregisterBlockVariation,
+    getBlockType = _wp$blocks.getBlockType,
+    getBlockVariations = _wp$blocks.getBlockVariations;
   wp.domReady(function () {
     if (document.querySelector('body').classList.contains('post-type-post')) {
       if (getBlockType('helsinki-tpr/unit')) {
@@ -127,24 +107,23 @@
     }
   });
 })(window.wp);
-
 (function (wp) {
   var __ = wp.i18n.__,
-      registerBlockType = wp.blocks.registerBlockType,
-      ServerSideRender = wp.serverSideRender,
-      useBlockProps = wp.blockEditor.useBlockProps,
-      _wp$element = wp.element,
-      Fragment = _wp$element.Fragment,
-      createElement = _wp$element.createElement,
-      _wp$components = wp.components,
-      SelectControl = _wp$components.SelectControl,
-      CheckboxControl = _wp$components.CheckboxControl,
-      TextControl = _wp$components.TextControl,
-      PanelRow = _wp$components.PanelRow,
-      PanelBody = _wp$components.PanelBody,
-      withSelect = wp.data.withSelect,
-      compose = wp.compose.compose,
-      InspectorControls = wp.editor.InspectorControls;
+    registerBlockType = wp.blocks.registerBlockType,
+    ServerSideRender = wp.serverSideRender,
+    useBlockProps = wp.blockEditor.useBlockProps,
+    _wp$element = wp.element,
+    Fragment = _wp$element.Fragment,
+    createElement = _wp$element.createElement,
+    _wp$components = wp.components,
+    SelectControl = _wp$components.SelectControl,
+    CheckboxControl = _wp$components.CheckboxControl,
+    TextControl = _wp$components.TextControl,
+    PanelRow = _wp$components.PanelRow,
+    PanelBody = _wp$components.PanelBody,
+    withSelect = wp.data.withSelect,
+    compose = wp.compose.compose,
+    InspectorControls = wp.editor.InspectorControls;
   var UnitConfigSelect = compose(withSelect(function (select, selectProps) {
     return {
       posts: select('core').getEntityRecords('postType', 'helsinki_tpr_unit', {
@@ -156,7 +135,6 @@
     };
   }))(function (props) {
     var options = [];
-
     if (props.posts) {
       options.push({
         value: 0,
@@ -174,7 +152,6 @@
         label: __('Loading', 'helsinki-tpr')
       });
     }
-
     return createElement(SelectControl, {
       label: __('Unit selection', 'helsinki-tpr'),
       value: props.attributes.postID,
@@ -186,10 +163,10 @@
       options: options
     });
   });
+
   /**
     * InspectorControls
     */
-
   function inspectorControls(props) {
     return createElement(InspectorControls, {}, createElement(PanelBody, {
       title: __('Settings', 'helsinki-tpr'),
@@ -200,7 +177,6 @@
       attribute: 'unitTitle'
     }, props)));
   }
-
   function informationControls(props) {
     return createElement(InspectorControls, {}, createElement(PanelBody, {
       title: __('Information', 'helsinki-tpr'),
@@ -247,11 +223,9 @@
       attribute: 'showAdditionalInfo'
     }, props)));
   }
-
   function configSelectControl(props) {
     return createElement(PanelRow, {}, createElement(UnitConfigSelect, props));
   }
-
   function infoToggleControl(config, props) {
     return createElement(PanelRow, {}, createElement(CheckboxControl, {
       label: config.label,
@@ -263,7 +237,6 @@
       }
     }));
   }
-
   function unitTitleControl(config, props) {
     return createElement(PanelRow, {}, createElement(TextControl, {
       label: config.label,
@@ -275,32 +248,29 @@
       }
     }));
   }
+
   /**
     * Elements
     */
-
-
   function preview(props) {
     return createElement('div', useBlockProps(), createElement(ServerSideRender, {
       block: 'helsinki-tpr/unit',
       attributes: props.attributes
     }));
   }
+
   /**
     * Edit
     */
-
-
   function edit() {
     return function (props) {
       return createElement(Fragment, {}, inspectorControls(props), informationControls(props), preview(props));
     };
   }
+
   /**
     * Register
     */
-
-
   registerBlockType('helsinki-tpr/unit', {
     title: __('Helsinki - Unit (TPR)', 'helsinki-tpr'),
     edit: edit()
