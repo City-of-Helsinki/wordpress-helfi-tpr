@@ -8,266 +8,227 @@
 
 namespace CityOfHelsinki\WordPress\TPR\Api\Entities;
 
-use DateTime;
-use Exception;
+use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Connection;
+use CityOfHelsinki\WordPress\TPR\Api\ValueObjects\Language;
 
-/**
- * Class Event
- */
-class Unit extends Entity {
-
-    /**
-     * Event settings
-     *
-     * @var array
-     */
+class Unit
+{
+    private UnitData $data;
     private array $settings;
+	private array $connections;
+	private array $languages;
 
-    /**
-     * Event constructor.
-     *
-     * @param mixed $entity_data Entity data.
-     * @param array $settings    Event settings.
-     */
-    public function __construct( $entity_data, array $settings = [] ) {
+    public function __construct( UnitData $data, array $settings = [] ) {
+        $this->data = $data;
         $this->settings = $settings;
 
-        parent::__construct( $entity_data );
+		$this->setup_connections();
+		$this->setup_languages();
     }
 
-    /**
-     * Get Id
-     *
-     * @return mixed
-     */
-    public function id() {
-        return $this->entity_data->id;
-    }
+	private function setup_connections(): void
+	{
+		$this->connections = array();
 
-    /**
-     * Get name
-     *
-     * @return string|null
-     */
-    public function name($language = null) {
-        return $this->key_by_language( 'name', null, $language);
-    }
-
-    /**
-     * Get short description
-     *
-     * @return string|null
-     */
-    public function short_description($language = null) {
-        return $this->key_by_language( 'short_description', null, $language );
-    }
-
-    /**
-     * Get description
-     *
-     * @return string|null
-     */
-    public function description($language = null) {
-        return $this->key_by_language( 'description', null, $language );
-    }
-
-    /**
-     * Get phone
-     *
-     * @return string|null
-     */
-    public function phone() {
-        return $this->entity_data->phone ?? null;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string|null
-     */
-    public function email() {
-        return $this->entity_data->email ?? null;
-    }
-
-    /**
-     * Get website url
-     *
-     * @return string|null
-     */
-    public function website_url($language = null) {
-        return $this->key_by_language( 'www', null, $language );
-    }
-
-    /**
-     * Get street address
-     *
-     * @return string|null
-     */
-    public function street_address($language = null) {
-        return $this->key_by_language( 'street_address', null, $language );
-    }
-
-    /**
-     * Get address zip
-     *
-     * @return string|null
-     */
-    public function address_zip() {
-        return $this->entity_data->address_zip ?? null;
-    }
-
-    /**
-     * Get address city
-     *
-     * @return string|null
-     */
-    public function address_city($language = null) {
-        return $this->key_by_language( 'address_city', null, $language );
-    }
-
-    /**
-     * Get postal address
-     *
-     * @return string|null
-     */
-    public function postal_address($language = null) {
-        return $this->key_by_language( 'address_postal_full', null, $language );
-    }
-
-    /**
-     * Get open hours
-     *
-     * @return array|null
-     */
-    public function open_hours($language = null) {
-        $connections = $this->entity_data->connections ?? null;
-        $open_hours = array();
-        if ($connections) {
-            foreach ($connections as $section) {
-                if ($this->get_property($section, 'section_type') == 'OPENING_HOURS') {
-                    $open_hours[] = $this->key_by_language( 'name', $section, $language );
-                }
-            }
-        }
-        return $open_hours;
-    }
-
-    /**
-     * Get additional info
-     *
-     * @return array|null
-     */
-    public function additional_info($language = null) {
-        $connections = $this->entity_data->connections ?? null;
-        $additional_info = array();
-        if ($connections) {
-            foreach ($connections as $section) {
-                if ($this->get_property($section, 'section_type') == 'HIGHLIGHT') {
-                    $additional_info[] = $this->key_by_language( 'name', $section, $language );
-                }
-            }
-        }
-        return $additional_info;
-    }
-
-	protected static function get_property( $item, $property ) {
-		if ( is_object( $item ) ) {
-			return property_exists( $item, $property ) ? (array) $item->{$property} : [];
-		} else {
-			return $item[$property] ?? [];
+		foreach ( $this->data->get_data( 'connections', array() ) as $data ) {
+			$this->add_connection($data );
 		}
 	}
 
-    public function get_service_map_link() {
-        $allowed_langs = array(
-            'fi',
-            'en',
-            'svg'
-        );
-        $current_lang = $this->current_language();
-        if (!in_array($current_lang, $allowed_langs)) {
-            $current_lang = 'en';
-        }
+	private function add_connection( $data ): void
+	{
+		$connection = new Connection( (array) $data );
 
-        if (!$this->id()) {
-            return null;
-        }
+		if ( ! isset( $this->connections[$connection->type()] ) ) {
+			$this->connections[$connection->type()] = array();
+		}
 
-        return 'https://palvelukartta.hel.fi/' . $current_lang . '/unit/' . $this->id();
+		$this->connections[$connection->type()][] = $connection;
+	}
+
+	private function setup_languages(): void
+	{
+		$this->languages = array();
+
+		array_reduce(
+			$this->data->get_data( 'provided_languages', array() ),
+			fn( $carry, $code ) => $this->add_language( $code )
+		);
+	}
+
+	private function add_language( string $code ): void
+	{
+		if ( ! isset( $this->languages[$code] ) ) {
+			$this->languages[$code] = Language::fromCode( $code );
+		}
+	}
+
+    public function id(): string
+	{
+		return (string) $this->data->get_data( __FUNCTION__, '' );
     }
 
-    public function get_hsl_route_link() {
-        $allowed_langs = array(
-            'fi',
-            'en',
-            'sv'
-        );
-        $current_lang = $this->current_language();
-        if (!in_array($current_lang, $allowed_langs)) {
-            $current_lang = 'en';
-        }
+    public function name( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( __FUNCTION__, $language, '' );
+    }
 
-        $street_address = $this->street_address();
-        $address_city = $this->address_city();
-        $latitude = $this->get_latitude();
-        $longitude = $this->get_longitude();
+    public function short_description( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( 'short_desc', $language, '' );
+    }
 
-        if (!$street_address || !$address_city || !$latitude || !$longitude) {
-            return null;
-        }
+    public function description( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( __FUNCTION__, $language, '' );
+    }
 
-        return sprintf('https://reittiopas.hsl.fi/%s/reitti/POS/', 
-            $current_lang,
-        ) . rawurlencode(sprintf('%s, %s::%s,%s',
+    public function phone(): string
+	{
+		return $this->data->get_data( __FUNCTION__, '' );
+    }
+
+    public function email(): string
+	{
+        return $this->data->get_data( __FUNCTION__, '' );
+    }
+
+    public function website_url( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( 'www', $language, '' );
+    }
+
+    public function street_address( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( __FUNCTION__, $language, '' );
+    }
+
+    public function address_zip(): string
+	{
+        return $this->data->get_data( __FUNCTION__, '' );
+    }
+
+    public function address_city( string $language = 'en' ): string
+	{
+        return $this->data->get_translated_data( __FUNCTION__, $language, '' );
+    }
+
+    public function postal_address( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( 'address_postal_full', $language, '' );
+    }
+
+    public function open_hours(): array
+	{
+        return $this->connections['OPENING_HOURS'] ?? array();
+    }
+
+	public function open_hours_html( string $language ): array
+	{
+		return $this->connections_html( $this->open_hours(), $language );
+	}
+
+    public function available_languages(): array
+	{
+		return array_map(
+			fn( $language ) => $language->label(),
+			$this->languages
+		);
+    }
+
+    public function additional_info(): array
+	{
+		return $this->connections['HIGHLIGHT'] ?? array();
+    }
+
+    public function additional_info_html( string $language = 'en' ): ?array
+	{
+		return $this->connections_html( $this->additional_info(), $language );
+    }
+
+	private function connections_html( array $connections, string $language ): array
+	{
+		return array_filter( array_map(
+			fn( Connection $connection ) => $connection->to_html( $language ),
+			$connections
+		) );
+	}
+
+    public function get_service_map_link( string $language = 'en' ): string
+	{
+		if ( ! $this->id() ) {
+			return '';
+		}
+
+		if ( ! in_array( $language, array( 'fi', 'en', 'sv', 'svg' ) ) ) {
+			$language = 'en';
+		}
+
+		return sprintf(
+			'https://palvelukartta.hel.fi/%s/unit/%s',
+			$language,
+			$this->id()
+		);
+    }
+
+    public function get_hsl_route_link( string $language = 'en' ): string
+	{
+		if ( ! $this->has_route_data() ) {
+			return '';
+		}
+
+		if ( ! in_array( $language, array( 'fi', 'en', 'sv' ) ) ) {
+			$language = 'en';
+		}
+
+        return sprintf(
+			'https://reittiopas.hsl.fi/%s/reitti/POS/',
+            $language,
+        ) . rawurlencode( sprintf(
+			'%s, %s::%s,%s',
             $this->street_address(),
             $this->address_city(),
             $this->get_latitude(),
             $this->get_longitude(),
-        ));
-;
-
+        ) );
     }
 
-    public function get_latitude() {
-        return $this->entity_data->latitude ?? null;
+	private function has_route_data(): bool
+	{
+		return $this->street_address()
+			&& $this->address_city()
+			&& $this->get_latitude()
+			&& $this->get_longitude();
+	}
+
+    public function get_latitude(): ?float
+	{
+		return $this->data->get_data( 'latitude', null );
     }
 
-    public function get_longitude() {
-        return $this->entity_data->longitude ?? null;
+    public function get_longitude(): ?float
+	{
+		return $this->data->get_data( 'longitude', null );
     }
 
-
-    /**
-     * Get image url
-     *
-     * @return string|null
-     */
-    public function image_url() {
-        return $this->entity_data->picture_url ?? null;
+    public function image_url(): string
+	{
+        return $this->data->get_data( 'picture_url', '' );
     }
 
-    /**
-     * Get image alt text
-     *
-     * @return string
-     */
-    public function image_alt_text($language = null) {
-        return $this->key_by_language( 'picture_caption', null, $language );
+    public function image_alt_text( string $language = 'en' ): string
+	{
+		return $this->data->get_translated_data( 'picture_caption', $language, '' );
     }
 
-	/**
-     * Get img tag
-     *
-     * @return string
-     */
-	public function html_img($language = null) {
-		if ( ! $this->image_url() ) {
-			return '';
-		}
-		return sprintf(
-			'<img src="%s" alt="%s">',
-			esc_url( $this->image_url() ),
-			esc_attr( $this->image_alt_text($language) )
-		);
+	public function html_img( string $language = 'en' ): string
+	{
+		return $this->image_url()
+			? sprintf(
+				'<img src="%s" alt="%s">',
+				esc_url( $this->image_url() ),
+				esc_attr( $this->image_alt_text($language) )
+			)
+			: '';
 	}
 }

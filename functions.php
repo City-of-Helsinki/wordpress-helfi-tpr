@@ -6,6 +6,10 @@ function debug_enabled() {
 	return defined( 'WP_DEBUG' ) && WP_DEBUG;
 }
 
+function plugin_version(): string {
+	return PLUGIN_VERSION;
+}
+
 function plugin_path() {
 	return untrailingslashit( PLUGIN_PATH ) . DIRECTORY_SEPARATOR;
 }

@@ -2,31 +2,24 @@
 
 namespace CityOfHelsinki\WordPress\TPR\Api;
 
-use CityOfHelsinki\WordPress\TPR\CacheManager;
-use CityOfHelsinki\WordPress\TPR\Api\Entities\Unit;
-use CityOfHelsinki\WordPress\TPR\Api\Filters\Places;
+use CityOfHelsinki\WordPress\TPR\Api\Entities\UnitData;
 
 class Units extends Client {
 
-	public static function entities( int $config_post_id ) {
-		$item = CacheManager::load( 'unit-' . $config_post_id );
-		if ( $item ) {
-			return new Unit($item);
-		}
-
+	public static function entities( int $config_post_id ): ?UnitData
+	{
 		$unit_id = self::unit_id( $config_post_id );
-
-		$response = self::get( 'unit/' . $unit_id );
-		if ( empty( $response ) ) {
-			return array();
+		if ( ! $unit_id ) {
+			return null;
 		}
 
-		CacheManager::store(
-			'unit-' . $config_post_id,
-			$response
-		);
+		$response = self::get( 'unit/' . $unit_id, array(
+			'newfeatures' => 'yes',
+		) );
 
-		return new Unit($response);
+		return $response
+			? UnitData::from_response( $response )
+			: null;
 	}
 
 	public static function current_language_entities( int $config_post_id  ) {
@@ -40,14 +33,17 @@ class Units extends Client {
 		} );
 	}
 
-	protected static function unit_id( int $post_id ) {
-		$tpr_id = get_post_meta($post_id, 'tpr_id', true);
-
-		return $tpr_id;
+	protected static function unit_id( int $post_id ): string
+	{
+		return \get_post_meta( $post_id, 'tpr_id', true ) ?: '';
 	}
 
 	public static function search_units(string $query) {
-		$response = self::get( 'unit', array_filter( array( 'search' => $query ) ) );
+		$response = self::get( 'unit', array_filter( array(
+			'search' => $query,
+			'newfeatures' => 'yes',
+		) ) );
+
 		return $response;
 	}
 
