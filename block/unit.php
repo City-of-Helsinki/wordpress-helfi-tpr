@@ -18,6 +18,16 @@ function register(): void {
 	);
 
 	\add_filter( 'helsinki_tpr_current_language', __NAMESPACE__ . '\\determine_current_language' );
+
+	\add_filter( 'helsinki_wp_allowed_blocks', __NAMESPACE__ . '\\provide_allowed_blocks', 10 );
+}
+
+function provide_allowed_blocks( array $blocks ): array {
+	if ( isset( $blocks['common'] ) ) {
+		$blocks['common']['helsinki-tpr/unit'] = true;
+	}
+
+	return $blocks;
 }
 
 function determine_current_language( string $language ): string {
