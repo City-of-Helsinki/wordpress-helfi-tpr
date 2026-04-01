@@ -3,9 +3,9 @@
 /**
   * Plugin Name: Helsinki TPR
   * Description: Integration with the Helsinki TPR API.
-  * Version: 2.1.0
+  * Version: 3.0.0
   * License: GPLv3
-  * Requires at least: 5.7
+  * Requires at least: 6.9
   * Requires PHP:      8.0
   * Author: Broomu Digitals
   * Author URI: https://www.broomudigitals.fi
