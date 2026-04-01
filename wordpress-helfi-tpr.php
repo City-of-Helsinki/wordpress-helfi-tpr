@@ -44,7 +44,7 @@ function init() {
 	spl_autoload_register( __NAMESPACE__ . '\\autoloader' );
 
 	require_once $dir . 'features/blocks/register.php';
-	require_once $dir . 'ajax/unit.php';
+	require_once $dir . 'features/ajax/unit.php';
   	require_once $dir . 'cpt/providers.php';
   	require_once $dir . 'cpt/unit-config.php';
 
