@@ -8,10 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use CityOfHelsinki\WordPress\TPR as Plugin;
 use CityOfHelsinki\WordPress\TPR\Cpt as Config;
-use CityOfHelsinki\WordPress\TPR\Blocks as Blocks;
-use CityOfHelsinki\WordPress\TPR\Api\Units;
 
 add_action( 'wp_ajax_helsinki_import_tpr_unit', __NAMESPACE__ . '\\import_tpr_unit' );
 function import_tpr_unit(): void {
