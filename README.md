@@ -28,12 +28,5 @@ Once a unit has been added to the site, it is possible to display it on a page w
 
 Simply insert a `Helsinki - TPR Unit` block onto a page, and from the block settings select the unit to be displayed. From the block settings it is possible to choose which information of the unit should be shown on the page.
 
-## Development
-
-### Assets
-(S)CSS and JS source files are stored in `/src`. Asset complitation is done with [Gulp](https://gulpjs.com/) and the processed files can be found in `/assets`.
-
-Install dependencies with `npm install`. Build assets with `gulp scripts` and `gulp styles` or watch changes with `gulp watch`.
-
 ## Collaboration
 Raise [issues](https://github.com/City-of-Helsinki/wordpress-helfi-tpr/issues) for found bugs or development ideas. Feel free to send [pull requests](https://github.com/City-of-Helsinki/wordpress-helfi-tpr/pulls) for bugfixes and new or improved features.
