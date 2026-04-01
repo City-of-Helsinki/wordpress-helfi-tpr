@@ -1,0 +1,118 @@
+.wp-block-helsinki-tpr {
+  --vertical-margin: var(--spacing-layout-s, 2rem);
+
+  margin-top: var(--vertical-margin);
+  margin-bottom: var(--vertical-margin);
+}
+
+@media screen and (min-width: 768px) {
+  .wp-block-helsinki-tpr {
+    --vertical-margin: var(--spacing-layout-l, 4rem);
+  }
+}
+
+.wp-block-helsinki-tpr .tpr-unit {
+  --icon-size: 24px;
+  --unit-padding: var(--spacing-s, 1rem);
+
+  background-color: rgb(247, 247, 248);
+  padding: var(--unit-padding);
+}
+
+.wp-block-helsinki-tpr .tpr-unit a .icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .hds-container {
+  --columns-gap: var(--spacing-s, 1rem);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--columns-gap);
+  padding: 0;
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__image {
+  --order: 1;
+  order: var(--order);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content {
+  --order: 2;
+  --title-gap: var(--spacing-s, 1rem);
+  --info-gap: var(--spacing-layout-2-xs, 1rem);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--info-gap);
+  order: var(--order);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__title {
+  margin: 0 0 var(--title-gap);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content p {
+  margin-bottom: var(--spacing-s, 1rem);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__section_title {
+  display: flex;
+  font-weight: bold;
+  margin-bottom: var(--spacing-2-xs, .5rem);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__section_title .icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  margin-inline-end: var(--spacing-2-xs, .5rem);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__section_title div {
+  line-height: 28px;
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__section_data {
+  margin-inline-start: var(--spacing-l, 2rem);
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__section_data p:last-child {
+  margin-bottom: 0;
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__website a {
+  overflow-wrap: anywhere;
+}
+
+.wp-block-helsinki-tpr .tpr-unit .unit__content .unit__link {
+  display: flex;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 768px) {
+  .wp-block-helsinki-tpr .tpr-unit {
+    --unit-padding: var(--spacing-m, 1.5rem);
+  }
+
+  .wp-block-helsinki-tpr .tpr-unit .hds-container {
+    --columns-gap: var(--spacing-l, 2rem);
+
+    grid-template-columns: calc( 65% - var(--columns-gap) ) 1fr;
+  }
+
+  .wp-block-helsinki-tpr .tpr-unit .unit__image {
+    --order: 2;
+  }
+
+  .wp-block-helsinki-tpr .tpr-unit .unit__content {
+    --order: 1;
+    --title-gap: 0;
+    --info-gap: var(--spacing-layout-s, 2rem);
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .wp-block-helsinki-tpr .tpr-unit {
+    --unit-padding: var(--spacing-l, 2rem);
+  }
+}
