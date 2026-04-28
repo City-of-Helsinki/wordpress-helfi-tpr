@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Helsinki TPR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-25 14:42+0000\n"
+"POT-Creation-Date: 2026-04-01 15:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -28,7 +28,8 @@ msgstr ""
 msgid "Add new units"
 msgstr ""
 
-#: block/unit.php:565 views/metabox/unit-data.php:100
+#: block/unit.php:500 views/metabox/unit-data.php:100
+#: features/blocks/unit/render.php:377
 msgid "Additional information"
 msgstr ""
 
@@ -40,7 +41,8 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: block/unit.php:477 views/metabox/unit-data.php:65
+#: block/unit.php:414 views/metabox/unit-data.php:65
+#: features/blocks/unit/render.php:291
 msgid "Email"
 msgstr ""
 
@@ -54,20 +56,15 @@ msgstr ""
 msgid "Finnish"
 msgstr ""
 
-#: block/unit.php:541
+#: block/unit.php:472 features/blocks/unit/render.php:349
 msgid "Go to the website"
 msgstr ""
 
-#: block/unit.php:113
+#: block/unit.php:55 features/blocks/register.php:64
 msgid "Helsinki"
 msgstr ""
 
-#: assets/admin/js/scripts.js:309 src/admin/js/block/unit.js:220
-msgid "Helsinki - TPR Unit"
-msgstr ""
-
-#: block/unit.php:16 assets/admin/js/scripts.js:306
-#: src/admin/js/block/unit.js:217
+#: features/blocks/unit/block.js:197
 msgid "Helsinki - Unit (TPR)"
 msgstr ""
 
@@ -75,7 +72,8 @@ msgstr ""
 msgid "Helsinki TPR"
 msgstr ""
 
-#: block/unit.php:417 views/metabox/unit-data.php:95
+#: block/unit.php:352 views/metabox/unit-data.php:95
+#: features/blocks/unit/render.php:229
 msgid "How to get here"
 msgstr ""
 
@@ -91,7 +89,7 @@ msgstr ""
 msgid "Import unit"
 msgstr ""
 
-#: assets/admin/js/scripts.js:206 src/admin/js/block/unit.js:84
+#: features/blocks/unit/block.js:75
 msgid "Information"
 msgstr ""
 
@@ -99,7 +97,7 @@ msgstr ""
 msgid "Integration with the Helsinki TPR API."
 msgstr ""
 
-#: assets/admin/js/scripts.js:174 src/admin/js/block/unit.js:42
+#: features/blocks/unit/block.js:39
 msgid "Loading"
 msgstr ""
 
@@ -107,7 +105,8 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: block/unit.php:498 views/metabox/unit-data.php:75
+#: block/unit.php:431 views/metabox/unit-data.php:75
+#: features/blocks/unit/render.php:308
 msgid "Open hours"
 msgstr ""
 
@@ -123,7 +122,7 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: block/unit.php:457
+#: block/unit.php:394 features/blocks/unit/render.php:271
 msgid "Phonenumber"
 msgstr ""
 
@@ -131,7 +130,7 @@ msgstr ""
 msgid "Postal Address"
 msgstr ""
 
-#: block/unit.php:438
+#: block/unit.php:375 features/blocks/unit/render.php:252
 msgid "Postal address"
 msgstr ""
 
@@ -143,59 +142,60 @@ msgstr ""
 msgid "Search:"
 msgstr ""
 
-#: assets/admin/js/scripts.js:163 src/admin/js/block/unit.js:30
+#: features/blocks/unit/block.js:27
 msgid "Select unit"
 msgstr ""
 
-#: block/unit.php:514 views/metabox/unit-data.php:80
+#: block/unit.php:447 views/metabox/unit-data.php:80
+#: features/blocks/unit/render.php:324
 msgid "Service language"
 msgstr ""
 
-#: assets/admin/js/scripts.js:195 src/admin/js/block/unit.js:66
+#: features/blocks/unit/block.js:58
 msgid "Settings"
 msgstr ""
 
-#: assets/admin/js/scripts.js:245 src/admin/js/block/unit.js:133
+#: features/blocks/unit/block.js:124
 msgid "Show additional information"
 msgstr ""
 
-#: assets/admin/js/scripts.js:241 src/admin/js/block/unit.js:128
+#: features/blocks/unit/block.js:119
 msgid "Show directions"
 msgstr ""
 
-#: assets/admin/js/scripts.js:217 src/admin/js/block/unit.js:98
+#: features/blocks/unit/block.js:89
 msgid "Show email"
 msgstr ""
 
-#: assets/admin/js/scripts.js:225 src/admin/js/block/unit.js:108
+#: features/blocks/unit/block.js:99
 msgid "Show open hours"
 msgstr ""
 
-#: assets/admin/js/scripts.js:221 src/admin/js/block/unit.js:103
+#: features/blocks/unit/block.js:94
 msgid "Show phone"
 msgstr ""
 
-#: assets/admin/js/scripts.js:209 src/admin/js/block/unit.js:88
+#: features/blocks/unit/block.js:79
 msgid "Show photo"
 msgstr ""
 
-#: assets/admin/js/scripts.js:237 src/admin/js/block/unit.js:123
+#: features/blocks/unit/block.js:114
 msgid "Show postal address"
 msgstr ""
 
-#: block/unit.php:423
+#: block/unit.php:358 features/blocks/unit/render.php:235
 msgid "Show route in the HSL Journey Planner"
 msgstr ""
 
-#: assets/admin/js/scripts.js:229 src/admin/js/block/unit.js:113
+#: features/blocks/unit/block.js:104
 msgid "Show service language"
 msgstr ""
 
-#: assets/admin/js/scripts.js:213 src/admin/js/block/unit.js:93
+#: features/blocks/unit/block.js:84
 msgid "Show street address"
 msgstr ""
 
-#: assets/admin/js/scripts.js:233 src/admin/js/block/unit.js:118
+#: features/blocks/unit/block.js:109
 msgid "Show website"
 msgstr ""
 
@@ -203,7 +203,7 @@ msgstr ""
 msgid "Street Address"
 msgstr ""
 
-#: block/unit.php:394
+#: block/unit.php:332 features/blocks/unit/render.php:209
 msgid "Street address"
 msgstr ""
 
@@ -212,12 +212,8 @@ msgstr ""
 msgid "Swedish"
 msgstr ""
 
-#: assets/admin/js/scripts.js:198 src/admin/js/block/unit.js:71
+#: features/blocks/unit/block.js:63
 msgid "Title"
-msgstr ""
-
-#: assets/admin/js/scripts.js:309 src/admin/js/block/unit.js:220
-msgid "tpr"
 msgstr ""
 
 #: cpt/unit-config.php:33 cpt/unit-config.php:89
@@ -228,11 +224,7 @@ msgstr ""
 msgid "TPR Units"
 msgstr ""
 
-#: assets/admin/js/scripts.js:309 src/admin/js/block/unit.js:220
-msgid "unit"
-msgstr ""
-
-#: assets/admin/js/scripts.js:179 src/admin/js/block/unit.js:47
+#: features/blocks/unit/block.js:44
 msgid "Unit selection"
 msgstr ""
 
@@ -244,10 +236,11 @@ msgstr ""
 msgid "Units (TPR)"
 msgstr ""
 
-#: block/unit.php:400
+#: block/unit.php:318 features/blocks/unit/render.php:195
 msgid "View location on service map"
 msgstr ""
 
-#: block/unit.php:535 views/metabox/unit-data.php:85
+#: block/unit.php:466 views/metabox/unit-data.php:85
+#: features/blocks/unit/render.php:343
 msgid "Website"
 msgstr ""

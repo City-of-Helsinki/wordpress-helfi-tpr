@@ -10,16 +10,14 @@
     { InspectorControls } = wp.editor;
 
   const UnitConfigSelect = compose(withSelect(function(select, selectProps){
-    return {posts: select('core').getEntityRecords(
-      'postType',
-      'helsinki_tpr_unit',
-      {
+    return {
+      posts: select('core').getEntityRecords('postType', 'helsinki_tpr_unit', {
         orderby : 'title',
         order : 'asc',
         per_page: 100,
         status : 'publish',
-      }
-    )};
+      })
+    };
   }))(function(props){
 
     var options = [];
