@@ -22,6 +22,8 @@ function setup_feature(): void {
 	\add_action( 'admin_menu', __NAMESPACE__ . '\\menu' );
 	\add_action( 'helsinki_tpr_unit_menu_page', __NAMESPACE__ . '\\render_unit_menu_page_search', 10 );
 	\add_action( 'helsinki_tpr_unit_menu_page', __NAMESPACE__ . '\\render_unit_menu_page_list', 20 );
+
+	\add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets', 10 );
 }
 
 function register(): void {
@@ -54,8 +56,6 @@ function register(): void {
 }
 
 function menu(): void {
-	require_once \plugin_dir_path( __FILE__ ) . 'class-helsinki-tpr-search-table.php';
-
 	\add_submenu_page(
         'edit.php?post_type=helsinki_tpr_unit',
         __( 'Add new unit', 'helsinki-tpr' ),
@@ -68,18 +68,46 @@ function menu(): void {
 }
 
 \add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\admin_assets' );
-function admin_assets( $hook ) {
-	if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
-		return;
-	}
+function admin_assets( string $hook ): void {
+	$base = Plugin\plugin_url();
+	$version = Plugin\debug_enabled() ? time() : Plugin\PLUGIN_VERSION;
+
+	\wp_register_script(
+		'helsinki-tpr-ajax',
+		$base . 'assets/admin/js/ajax.js',
+		array(),
+		$version,
+		true
+	);
+
+	\wp_add_inline_script(
+		'helsinki-tpr-ajax',
+		sprintf( 'const helsinkiTPR = %s;', json_encode(
+			array( 'ajaxUrl' => \admin_url( 'admin-ajax.php' ) )
+		) ),
+		'before'
+	);
+
+	\wp_register_script(
+		'helsinki-tpr-unit',
+		$base . 'assets/admin/js/post-unit.js',
+		array(),
+		$version,
+		true
+	);
+
+	\wp_register_style(
+		'helsinki-tpr-unit',
+		$base . 'assets/admin/css/unit.css',
+		array(),
+		$version,
+		'all'
+	);
 }
 
 \add_filter( 'use_block_editor_for_post_type', __NAMESPACE__ . '\\disable_editor', 10, 2 );
 function disable_editor( $current_status, $post_type ) {
-	if ( 'helsinki_tpr_unit' === $post_type ) {
-		return false;
-	}
-    return $current_status;
+    return 'helsinki_tpr_unit' === $post_type ? false : $current_status;
 }
 
 \add_action( 'add_meta_boxes_helsinki_tpr_unit', __NAMESPACE__ . '\\metabox' );
@@ -95,6 +123,10 @@ function metabox( $post ) {
 }
 
 function render_unit_menu_page(): void {
+	require_once \plugin_dir_path( __FILE__ ) . 'class-helsinki-tpr-search-table.php';
+
+	\wp_enqueue_script( 'helsinki-tpr-ajax' );
+
 	require_once Plugin\views_path( 'unit' ) . 'unit-search.php';
 }
 
@@ -109,6 +141,9 @@ function render_unit_menu_page_list(): void {
 }
 
 function render_metabox( $post, $metabox ): void {
+	\wp_enqueue_script( 'helsinki-tpr-unit' );
+	\wp_enqueue_style( 'helsinki-tpr-unit' );
+
 	$savedOptions = \maybe_unserialize( $post->post_content );
 
 	\wp_nonce_field( 'helsinki-tpr-unit-nonce', 'helsinki-tpr-unit-nonce' );

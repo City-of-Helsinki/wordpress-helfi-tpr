@@ -1,15 +1,17 @@
 <?php
 
-namespace CityOfHelsinki\WordPress\TPR\Ajax;
+declare(strict_types = 1);
 
-use CityOfHelsinki\WordPress\TPR as Plugin;
+namespace CityOfHelsinki\WordPress\TPR\Features\Ajax;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use CityOfHelsinki\WordPress\TPR\Cpt as Config;
-use CityOfHelsinki\WordPress\TPR\Blocks as Blocks;
-use CityOfHelsinki\WordPress\TPR\Api\Units;
 
 add_action( 'wp_ajax_helsinki_import_tpr_unit', __NAMESPACE__ . '\\import_tpr_unit' );
-
-function import_tpr_unit() {
+function import_tpr_unit(): void {
 	$id = $_POST['id'] ?? 0;
 	$title = $_POST['title'] ?? '';
 	if ( ! $id  ) {
